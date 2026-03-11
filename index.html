@@ -23,6 +23,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);lin
 .fade-in{animation:fadeIn .4s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
+/* Accessibility utilities */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999}
+.skip-link:focus{position:fixed;top:8px;left:8px;width:auto;height:auto;padding:10px 18px;background:var(--accent);color:#fff;font-size:14px;font-weight:600;border-radius:8px;text-decoration:none;z-index:999}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
 /* Header */
 .site-header{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
 .site-header .label{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
@@ -51,12 +57,12 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
 .landing-hero p{color:var(--muted);margin-bottom:16px;font-size:15px;line-height:1.7}
 .landing-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0;text-align:left}
 .landing-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
-.landing-card h4{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.landing-card h3{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:4px}
 .landing-card p{font-size:13px;color:var(--muted);line-height:1.5}
 .name-section{margin:28px 0;text-align:center}
 .name-section label{font-size:15px;font-weight:600;display:block;margin-bottom:10px}
 .name-section input{font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 18px;border:2px solid var(--border);border-radius:8px;width:300px;max-width:100%;text-align:center;background:var(--surface)}
-.name-section input:focus{border-color:var(--accent);outline:none}
+.name-section input:focus{border-color:var(--accent)}
 
 /* ===== COUNTRY CARDS ===== */
 .country-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
@@ -107,7 +113,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
 .strategy-card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(45,106,79,.08);transform:translateY(-1px)}
 .strategy-card.selected{border-color:var(--accent);background:var(--accent-light);box-shadow:0 4px 16px rgba(45,106,79,.12)}
 .strategy-card.trap{border-color:var(--negative);background:var(--negative-light)}
-.strategy-card h4{font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:6px}
+.strategy-card h3{font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:6px}
 .strategy-card .tagline{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:12px;line-height:1.4}
 .strategy-card .pros-cons{font-size:12px;line-height:1.5}
 .strategy-card .pro,.strategy-card .con{padding:3px 0 3px 14px;position:relative}
@@ -137,7 +143,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
 .reflection-input .r-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--info);margin-bottom:6px}
 .reflection-input .r-question{font-size:14px;line-height:1.6;margin-bottom:12px;font-weight:500}
 .reflection-input textarea{width:100%;min-height:80px;padding:12px;border:2px solid #b8d4f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;resize:vertical;background:#fff}
-.reflection-input textarea:focus{border-color:var(--info);outline:none}
+.reflection-input textarea:focus{border-color:var(--info)}
 .reflection-input .r-hint{font-size:12px;color:var(--muted);margin-top:6px}
 
 /* ===== REPORT ===== */
@@ -170,6 +176,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <div class="container">
 
 <header class="site-header">
@@ -178,6 +185,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
   <p class="subtitle">Navigate de-dollarization as a central bank reserve manager.</p>
 </header>
 
+<main id="main-content">
 <!-- ===== LANDING ===== -->
 <div id="screen-landing" class="screen active">
   <div class="landing-hero">
@@ -187,16 +195,16 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
   </div>
   <div class="landing-grid">
     <div class="landing-card">
-      <h4>Simple Choices, Real Tradeoffs</h4>
+      <h3>Simple Choices, Real Tradeoffs</h3>
       <p>Each round, pick one of three strategies. Each has clear pros and cons. No strategy is safe.</p>
     </div>
     <div class="landing-card">
-      <h4>Three Countries, Three Problems</h4>
+      <h3>Three Countries, Three Problems</h3>
       <p>An oil exporter, a sanctioned economy, and the world's factory. Each faces a different version of the same question: how much can you trust the dollar?</p>
     </div>
   </div>
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:0 0 28px">
-    <h4 style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px">Your Stability Score (A through F) tracks four metrics:</h4>
+    <h3 style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px">Your Stability Score (A through F) tracks four metrics:</h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px">
       <div style="font-size:13px;line-height:1.5"><strong style="color:var(--accent)">Growth</strong> &mdash; Are your reserves growing or shrinking? High returns boost this score; bad bets tank it.</div>
       <div style="font-size:13px;line-height:1.5"><strong style="color:var(--info)">Liquidity</strong> &mdash; Can you convert reserves to cash quickly? Dollars are instant; gold takes weeks to sell in volume.</div>
@@ -237,7 +245,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
     <div class="phase-label">Your Move</div>
     <h2 class="section-title">Choose Your Strategy for <span id="strategyYear"></span></h2>
     <p class="section-desc" id="strategyDesc">Select one of three approaches. Each reshapes your reserve portfolio with different tradeoffs.</p>
-    <div class="strategy-grid" id="strategyGrid"></div>
+    <div class="strategy-grid" id="strategyGrid" role="radiogroup" aria-label="Strategy options"></div>
     <div style="text-align:right;margin-top:16px">
       <button class="btn btn-primary" id="btnLock" disabled>Lock In Strategy &rarr;</button>
     </div>
@@ -247,7 +255,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
     <div class="phase-label">Year-End Results</div>
     <h2 class="section-title" id="resultsTitle"></h2>
 
-    <div class="score-panel" id="scorePanel">
+    <div class="score-panel" id="scorePanel" aria-live="polite">
       <div class="score-label">Stability Score</div>
       <div class="score-big" id="scoreBig">B</div>
       <div class="score-number" id="scoreNumber">72 / 100</div>
@@ -256,8 +264,8 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
 
     <div id="actionNarrative"></div>
     <div id="allocBarResult"></div>
-    <div id="outcomeNarrative"></div>
-    <div id="bulletinArea"></div>
+    <div id="outcomeNarrative" aria-live="polite"></div>
+    <div id="bulletinArea" aria-live="polite"></div>
     <div id="reflectionArea"></div>
 
     <div style="text-align:right;margin-top:16px">
@@ -306,6 +314,7 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
   </div>
 </div>
 
+</main>
 <footer class="game-footer">Reserve Currency Wargame &middot; FINAN VIII: Future of Finance</footer>
 </div>
 
@@ -864,6 +873,8 @@ function showScreen(id) {
   el.classList.add('active');
   el.classList.add('fade-in');
   window.scrollTo({top:0,behavior:'smooth'});
+  const heading = el.querySelector('h2');
+  if (heading) { heading.setAttribute('tabindex','-1'); heading.focus(); }
 }
 function showPhase(p) {
   document.querySelectorAll('#screen-round .phase').forEach(ph => ph.style.display='none');
@@ -871,9 +882,11 @@ function showPhase(p) {
   el.style.display='block';
   el.classList.add('fade-in');
   window.scrollTo({top:0,behavior:'smooth'});
+  const heading = el.querySelector('h2, h3');
+  if (heading) { heading.setAttribute('tabindex','-1'); heading.focus(); }
 }
 function renderAllocBar(alloc, container, showLegend) {
-  let html = '<div class="alloc-bar">';
+  let html = '<div class="alloc-bar" aria-hidden="true">';
   const frozen = G.country && G.country.frozen;
   CATS.forEach(c => {
     const v = alloc[c];
@@ -892,7 +905,7 @@ function renderAllocBar(alloc, container, showLegend) {
       if (v > 0) {
         const isFrozen = (G.country && G.country.frozen[c]);
         const fr = isFrozen ? ' (FROZEN)' : '';
-        html += `<span><span class="dot" style="background:${isFrozen?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%${fr}</span>`;
+        html += `<span><span class="dot" style="background:${isFrozen?'#999':CAT_COLORS[c]}" aria-hidden="true"></span>${CAT_SHORT[c]} ${v}%${fr}</span>`;
       }
     });
     html += '</div>';
@@ -923,8 +936,10 @@ function buildCountryCards() {
     const card = document.createElement('div');
     card.className = 'country-card';
     card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', 'Play as ' + c.name);
 
-    let barHtml = '<div class="start-bar"><div class="alloc-bar">';
+    let barHtml = '<div class="start-bar"><div class="alloc-bar" aria-hidden="true">';
     CATS.forEach(cat => {
       const v = c.startAlloc[cat];
       if (v > 0) {
@@ -936,8 +951,8 @@ function buildCountryCards() {
     CATS.forEach(cat => {
       const v = c.startAlloc[cat];
       if (v > 0) {
-        const fr = c.frozen[cat] ? ' \u2744\uFE0F' : '';
-        barHtml += `<span><span class="dot" style="background:${c.frozen[cat]?'#999':CAT_COLORS[cat]}"></span>${CAT_SHORT[cat]} ${v}%${fr}</span>`;
+        const fr = c.frozen[cat] ? ' (FROZEN)' : '';
+        barHtml += `<span><span class="dot" style="background:${c.frozen[cat]?'#999':CAT_COLORS[cat]}" aria-hidden="true"></span>${CAT_SHORT[cat]} ${v}%${fr}</span>`;
       }
     });
     barHtml += '</div></div>';
@@ -957,8 +972,10 @@ function buildCountryCards() {
 function startRound() {
   showScreen('screen-round');
   const dots = document.getElementById('roundDots');
-  dots.innerHTML = '';
-  for (let i=0;i<4;i++){const d=document.createElement('div');d.className='round-dot';if(i<G.round)d.classList.add('done');if(i===G.round)d.classList.add('now');dots.appendChild(d);}
+  dots.setAttribute('role', 'status');
+  dots.setAttribute('aria-label', 'Round ' + (G.round+1) + ' of 4');
+  dots.innerHTML = '<span class="sr-only">Round ' + (G.round+1) + ' of 4</span>';
+  for (let i=0;i<4;i++){const d=document.createElement('div');d.className='round-dot';d.setAttribute('aria-hidden','true');if(i<G.round)d.classList.add('done');if(i===G.round)d.classList.add('now');dots.appendChild(d);}
 
   document.getElementById('phaseNewsLabel').textContent = `Round ${G.round+1} of 4`;
   document.getElementById('roundTitle').textContent = `${ROUND_YEARS[G.round]}: ${ROUND_NAMES[G.round]}`;
@@ -1044,12 +1061,16 @@ function renderStrategies() {
   options.forEach((opt, i) => {
     const card = document.createElement('div');
     card.className = 'strategy-card';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', 'false');
+    card.setAttribute('aria-label', opt.name + ': ' + opt.tag);
 
-    let prosHtml = opt.pros.map(p => `<div class="pro">${p}</div>`).join('');
-    let consHtml = opt.cons.map(c => `<div class="con">${c}</div>`).join('');
+    let prosHtml = opt.pros.map(p => `<div class="pro"><span class="sr-only">Pro: </span>${p}</div>`).join('');
+    let consHtml = opt.cons.map(c => `<div class="con"><span class="sr-only">Con: </span>${c}</div>`).join('');
 
     // Mini alloc bar
-    let barHtml = '<div class="alloc-bar" style="height:16px;margin:10px 0 6px">';
+    let barHtml = '<div class="alloc-bar" aria-hidden="true" style="height:16px;margin:10px 0 6px">';
     CATS.forEach(c => {
       const v = opt.alloc[c];
       if (v>0) {
@@ -1061,18 +1082,21 @@ function renderStrategies() {
     let legendHtml = '<div class="alloc-legend" style="margin-bottom:10px">';
     CATS.forEach(c => {
       const v = opt.alloc[c];
-      if (v>0) legendHtml += `<span><span class="dot" style="background:${(G.country.frozen[c])?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%${G.country.frozen[c]?' (FROZEN)':''}</span>`;
+      if (v>0) legendHtml += `<span><span class="dot" style="background:${(G.country.frozen[c])?'#999':CAT_COLORS[c]}" aria-hidden="true"></span>${CAT_SHORT[c]} ${v}%${G.country.frozen[c]?' (FROZEN)':''}</span>`;
     });
     legendHtml += '</div>';
 
-    card.innerHTML = `<h4>${opt.name}</h4><div class="tagline">"${opt.tag}"</div>${barHtml}${legendHtml}<div class="pros-cons">${prosHtml}${consHtml}</div>`;
+    card.innerHTML = `<h3>${opt.name}</h3><div class="tagline">"${opt.tag}"</div>${barHtml}${legendHtml}<div class="pros-cons">${prosHtml}${consHtml}</div>`;
 
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.strategy-card').forEach(c => c.classList.remove('selected'));
+    const selectCard = () => {
+      document.querySelectorAll('.strategy-card').forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-checked','false'); });
       card.classList.add('selected');
+      card.setAttribute('aria-checked', 'true');
       _selectedStrategy = i;
       document.getElementById('btnLock').disabled = false;
-    });
+    };
+    card.addEventListener('click', selectCard);
+    card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();selectCard();}});
     grid.appendChild(card);
   });
 }
@@ -1179,8 +1203,9 @@ function renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlemen
     </div>
     <div class="reflection-input">
       <div class="r-label">Final Reflection</div>
-      <p class="r-question">What went wrong? Looking back at your strategy, where was the critical error — and what would you do differently?</p>
-      <textarea id="reflectionGameOver" placeholder="Write your reflection here..."></textarea>
+      <label for="reflectionGameOver" class="sr-only">Final reflection on what went wrong</label>
+      <p class="r-question" id="goQuestion">What went wrong? Looking back at your strategy, where was the critical error — and what would you do differently?</p>
+      <textarea id="reflectionGameOver" aria-describedby="goQuestion" placeholder="Write your reflection here..."></textarea>
     </div>
     <div style="text-align:center;margin-top:20px;display:flex;gap:12px;justify-content:center">
       <button class="btn btn-primary" id="btnGameOverReport">View Report &rarr;</button>
@@ -1278,10 +1303,11 @@ function renderResults(alloc, score, grade, growth, liq, safety, settlement, por
   const refEl = document.getElementById('reflectionArea');
   refEl.innerHTML = `
     <div class="reflection-input">
-      <div class="r-label">Reflection — Round ${G.round+1}</div>
-      <p class="r-question">${refQ}</p>
-      <textarea id="reflectionInput${G.round}" placeholder="Write your analysis here (2-3 sentences)..."></textarea>
-      <div class="r-hint">Your reflections will be compiled at the end for your discussion post.</div>
+      <div class="r-label" id="refLabel${G.round}">Reflection — Round ${G.round+1}</div>
+      <p class="r-question" id="refQuestion${G.round}">${refQ}</p>
+      <label for="reflectionInput${G.round}" class="sr-only">Your reflection for round ${G.round+1}</label>
+      <textarea id="reflectionInput${G.round}" aria-describedby="refQuestion${G.round} refHint${G.round}" placeholder="Write your analysis here (2-3 sentences)..."></textarea>
+      <div class="r-hint" id="refHint${G.round}">Your reflections will be compiled at the end for your discussion post.</div>
     </div>
   `;
 
