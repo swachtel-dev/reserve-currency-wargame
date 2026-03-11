@@ -420,7 +420,7 @@ function getNews(round, countryKey) {
 // =====================================================================
 // REFLECTION QUESTIONS — country-specific
 // =====================================================================
-function getReflection(round, countryKey) {
+function getReflection(round, countryKey, strategyName) {
   const questions = {
     petrolistan: [
       'Petrolistan earns 70% of its revenue in dollars. Look at your allocation: what percentage of your reserves is still dollar-denominated? If the US imposed secondary sanctions on oil buyers who pay Petrolistan in non-dollar currencies, how would your current position hold up?',
@@ -432,7 +432,7 @@ function getReflection(round, countryKey) {
       'Twenty percent of your reserves are frozen and inaccessible. Of your remaining reserves, what percentage is in assets that no government can seize? Is that enough to sustain trade, or are you trading security for functionality?',
       'New sanctions just froze another country\'s reserves. You\'ve been living under sanctions already. Has your experience under sanctions prepared you for this moment, or has it just shifted your vulnerability from Western sanctions to Chinese dependence?',
       'BRICS Bridge is live. For Sanctiongrad, this isn\'t an opportunity — it\'s a lifeline. But China controls significant parts of this infrastructure. How is depending on BRICS Bridge different from depending on SWIFT? Is it different?',
-      'President Volkov is celebrating the dollar\'s decline on state television. But your people face consumer goods shortages and your semiconductor imports have stopped. Is "winning" the de-dollarization argument worth the economic cost? At what point does financial independence become economic isolation?'
+      null // R4 handled below — depends on strategy choice
     ],
     dragonia: [
       'Dragonia holds the world\'s largest Treasury stockpile. If you started selling aggressively, Treasury prices would fall — destroying the value of your remaining holdings. How does this "dollar trap" constrain your options in ways other countries don\'t face?',
@@ -441,6 +441,18 @@ function getReflection(round, countryKey) {
       'The dollar is falling. Dragonia\'s remaining Treasury holdings are losing value daily. But a weaker dollar also means weaker American demand for Dragonian exports. You\'re caught between two losses. Which one hurts more, and what does that tell you about the real purpose of reserves — investment returns or trade facilitation?'
     ]
   };
+
+  // Sanctiongrad R4 branches based on deal choice
+  if (countryKey === 'sanctiongrad' && round === 3) {
+    if (strategyName === 'Accept the Deal') {
+      return 'You chose to accept sanctions relief and re-engage with the Western financial system. Volkov made energy concessions to Europe in exchange for unfreezing your reserves. Was this pragmatism or capitulation? You now have access to Western assets again, but you\'re back under the same system that froze you in the first place. What guarantees do you have that it won\'t happen again? Was the independence you built over three years worth giving up?';
+    }
+    if (strategyName === 'Victory Lap') {
+      return 'President Volkov is celebrating the dollar\'s decline on state television while 45% of your reserves are in digital assets most trade partners refuse to accept. Your people face consumer goods shortages and semiconductor imports have stopped. Is "winning" the de-dollarization argument worth the economic cost? At what point does ideological victory become economic self-harm?';
+    }
+    return 'You chose to stay independent rather than accept Western sanctions relief. The frozen reserves are gone, but you owe no concessions. President Volkov calls it sovereignty; your citizens call it hardship. Was maintaining independence worth the cost of continued isolation? What would have to change for the deal to have been worth taking?';
+  }
+
   return questions[countryKey]?.[round] || '';
 }
 
@@ -736,7 +748,8 @@ function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
   const cn = narratives[countryKey];
   if (!cn) return null;
 
-  // Trap-specific narratives
+  // Special narratives
+  if (stratName === 'Accept the Deal') return {headline:'BREAKING: Sanctiongrad Accepts Western Sanctions Relief — Frozen Reserves to Be Released', detail:'In a dramatic reversal, President Volkov signed an energy concession agreement with the European Union in exchange for the unfreezing of Sanctiongrad\'s Western reserves. Volkov called it "a pragmatic decision for our people." Opposition figures call it surrender. Western goods are expected to return to stores within weeks. The reserve manager breathes for the first time in years.'};
   if (stratName === 'Fortress Dollar' || stratName === 'Treasury Fortress') return cn.trapFortress;
   if (stratName === 'Full Crypto') return cn.trapCrypto;
   if (stratName === 'Burn the Ships') return cn.trapBurn;
@@ -770,13 +783,7 @@ function getEpilogue(countryKey, finalGrade, strategies) {
       D: 'Petrolistan is struggling. Import channels are unreliable, medicine shortages are becoming normalized, and oil infrastructure maintenance has been deferred for the third consecutive year. The Supreme Leader blames foreign adversaries, but internal memos point to reserve management failures. Young professionals are emigrating. The reserve portfolio needs years to recover.',
       F: 'Petrolistan faces a humanitarian crisis. Oil production is declining because maintenance equipment cannot be imported. Hospital pharmacies are rationing basic medications. The Supreme Leader has declared a "state of economic emergency" and is negotiating with anyone who will listen. The reserve manager has been replaced. Twice.'
     },
-    sanctiongrad: {
-      A: 'Against all odds, Sanctiongrad has built a functioning parallel economy. The frozen Western reserves are written off, but the remaining portfolio generates enough liquidity and settlement capability to sustain essential trade. Consumer goods are available (mostly Chinese-made). President Volkov\'s approval ratings are stable. The economy isn\'t thriving, but it isn\'t collapsing either — and after years of sanctions, that is its own kind of victory.',
-      B: 'Sanctiongrad perseveres. The economy functions through a patchwork of bilateral agreements, gold-for-goods swaps, and BRICS payment rails. It\'s slower, more expensive, and less elegant than the Western system, but it works. Consumer electronics are scarce but available. President Volkov tells state media that "independence has a price worth paying." Whether citizens agree is a question no one is permitted to poll.',
-      C: 'Sanctiongrad is surviving, barely. Essential imports flow but at significant markup. Technology access is limited to what China provides, and China drives a hard bargain. The parallel economy works for basics but cannot support modernization. Volkov\'s rhetoric remains defiant, but the Obsidian Palace corridors are quieter than they used to be.',
-      D: 'Sanctiongrad\'s economy is visibly deteriorating. Consumer goods shortages are spreading. Young engineers emigrate to Central Asia and the Gulf. The frozen reserves feel less like a political grievance and more like a permanent loss. Volkov still appears on state television, but the speeches are shorter now.',
-      F: 'Sanctiongrad\'s economy has entered a crisis the government can no longer conceal. Essential goods are rationed. Industrial output has fallen to levels not seen since the 1990s. The frozen Western reserves, the failed digital bets, and the inadequate settlement infrastructure have created a compounding disaster. Volkov remains in power, but the "liberation" he promised looks increasingly like isolation.'
-    },
+    sanctiongrad: null, // handled specially below
     dragonia: {
       A: 'Dragonia enters 2030 as the architect of the new financial order it spent a decade building. BRICS Bridge processes trillions in trade. The digital yuan is accepted across Southeast Asia. The Treasury selloff was managed so smoothly that markets barely noticed. General Zhao is promoted. Premier Li addresses the National People\'s Assembly: "The era of dependence on any single currency is over. Dragonia\'s reserves serve Dragonia."',
       B: 'Dragonia has navigated the transition competently. The BRICS payment system works. Factories run. Exports flow. But the Treasury selloff took longer than planned and cost more than projected. The relationship with Washington is strained, and some ASEAN partners are wary of yuan dependence. General Zhao keeps a lower profile now. The transition isn\'t complete, but the direction is irreversible.',
@@ -785,6 +792,30 @@ function getEpilogue(countryKey, finalGrade, strategies) {
       F: 'Dragonia faces its worst economic crisis in three decades. Manufacturing output has fallen sharply as supply chains break down. The massive digital asset bet (or the failed Treasury strategy) has erased hundreds of billions in reserve value. Unemployment protests — rare and alarming — appear in industrial cities. The Dragon Council meets in emergency session. The era of easy growth is over, and the reserve portfolio that was supposed to insulate the economy has instead become the problem.'
     }
   };
+
+  // Sanctiongrad epilogue branches on whether they took the deal
+  if (countryKey === 'sanctiongrad') {
+    const tookDeal = strategies.some(s => s.name === 'Accept the Deal');
+    if (tookDeal) {
+      const dealEpilogues = {
+        A: 'Sanctiongrad re-enters the global financial system on surprisingly favorable terms. The energy concessions to Europe were painful, but the unfrozen reserves — combined with the alternative infrastructure built during the sanctions years — give Volkov genuine leverage. Western goods flow again. Semiconductors arrive. Hospitals restock. The irony is not lost on analysts: Sanctiongrad\'s years of forced independence gave it bargaining power it never would have had otherwise. Volkov tells state media it was "the plan all along." It wasn\'t, but the result speaks for itself.',
+        B: 'The deal with the West is working, mostly. Frozen reserves are accessible again, and Western imports are resuming. But the energy concessions sting, and Volkov\'s nationalist base is restless. The economy is recovering, but the scars of sanctions remain — supply chains rebuilt around Chinese partners don\'t easily reorient westward. Sanctiongrad is no longer isolated, but it\'s not fully reintegrated either. It occupies an uncomfortable middle ground.',
+        C: 'Sanctions relief came, but not salvation. The unfrozen reserves helped stabilize the economy, but years of isolation left structural damage that money alone cannot fix. Skilled workers emigrated. Factories retooled for Chinese components that Western replacements don\'t fit. The deal stopped the bleeding, but recovery will take years. Volkov declares victory on television; the finance ministry\'s internal projections are less optimistic.',
+        D: 'The deal came too late. By the time Western reserves were unfrozen, the economy had deteriorated beyond what a financial injection could repair. Consumer goods are returning to shelves, but factories that closed during the sanctions years do not simply reopen. The reserve portfolio stabilized, but the real economy is still in recession. Volkov accepted the deal from weakness, and everyone knows it.',
+        F: 'The deal was signed in desperation. Sanctiongrad made enormous energy concessions to Europe for sanctions relief, but the economy was already in freefall. Unfrozen reserves covered emergency imports for six months before running low. The parallel systems built during the sanctions years collapsed once the political will to maintain them evaporated. Sanctiongrad is financially dependent on the West again — exactly where it started, but poorer.'
+      };
+      return dealEpilogues[finalGrade] || dealEpilogues['C'];
+    } else {
+      const indepEpilogues = {
+        A: 'Against all odds, Sanctiongrad has built a functioning parallel economy. The frozen Western reserves are written off as a permanent loss, but the remaining portfolio generates enough liquidity and settlement capability to sustain essential trade. Consumer goods are available (mostly Chinese-made). President Volkov\'s approval ratings are stable. The economy isn\'t thriving, but it isn\'t collapsing — and after years of sanctions, survival on your own terms is its own kind of victory.',
+        B: 'Sanctiongrad perseveres. The economy functions through a patchwork of bilateral agreements, gold-for-goods swaps, and BRICS payment rails. It\'s slower, more expensive, and less elegant than the Western system, but it works. Consumer electronics are scarce but available. President Volkov tells state media that "independence has a price worth paying." Whether citizens agree is a question no one is permitted to poll.',
+        C: 'Sanctiongrad is surviving, barely. Essential imports flow but at significant markup. Technology access is limited to what China provides, and China drives a hard bargain. The parallel economy works for basics but cannot support modernization. Volkov\'s rhetoric remains defiant, but the Obsidian Palace corridors are quieter than they used to be.',
+        D: 'Sanctiongrad\'s economy is visibly deteriorating. Consumer goods shortages are spreading. Young engineers emigrate to Central Asia and the Gulf. The frozen reserves feel less like a political grievance and more like a permanent loss. Volkov still appears on state television, but the speeches are shorter now.',
+        F: 'Sanctiongrad\'s economy has entered a crisis the government can no longer conceal. Essential goods are rationed. Industrial output has fallen to levels not seen since the 1990s. The frozen Western reserves, the failed bets, and the inadequate settlement infrastructure have created a compounding disaster. Volkov remains in power, but the "liberation" he promised looks increasingly like isolation.'
+      };
+      return indepEpilogues[finalGrade] || indepEpilogues['C'];
+    }
+  }
 
   const country = epilogues[countryKey];
   if (!country) return '';
@@ -848,7 +879,7 @@ function renderAllocBar(alloc, container, showLegend) {
     const v = alloc[c];
     if (v > 0) {
       const isFrozen = frozen && frozen[c] && !G.sanctionsApplied === false; // simplified
-      const cls = (frozen && frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3) ? 'frozen' : c;
+      const cls = (frozen && frozen[c]) ? 'frozen' : c;
       const label = v >= 8 ? v+'%' : '';
       html += `<div class="seg ${cls}" style="width:${v}%">${label}</div>`;
     }
@@ -859,7 +890,7 @@ function renderAllocBar(alloc, container, showLegend) {
     CATS.forEach(c => {
       const v = alloc[c];
       if (v > 0) {
-        const isFrozen = (G.country && G.country.frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3);
+        const isFrozen = (G.country && G.country.frozen[c]);
         const fr = isFrozen ? ' (FROZEN)' : '';
         html += `<span><span class="dot" style="background:${isFrozen?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%${fr}</span>`;
       }
@@ -1022,7 +1053,7 @@ function renderStrategies() {
     CATS.forEach(c => {
       const v = opt.alloc[c];
       if (v>0) {
-        const cls = (G.country.frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3) ? 'frozen' : c;
+        const cls = (G.country.frozen[c]) ? 'frozen' : c;
         barHtml += `<div class="seg ${cls}" style="width:${v}%">${v>=12?v+'%':''}</div>`;
       }
     });
@@ -1030,7 +1061,7 @@ function renderStrategies() {
     let legendHtml = '<div class="alloc-legend" style="margin-bottom:10px">';
     CATS.forEach(c => {
       const v = opt.alloc[c];
-      if (v>0) legendHtml += `<span><span class="dot" style="background:${(G.country.frozen[c]&&G.countryKey==='sanctiongrad'&&G.round<3)?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%</span>`;
+      if (v>0) legendHtml += `<span><span class="dot" style="background:${(G.country.frozen[c])?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%${G.country.frozen[c]?' (FROZEN)':''}</span>`;
     });
     legendHtml += '</div>';
 
@@ -1064,7 +1095,7 @@ document.getElementById('btnLock').addEventListener('click', () => {
   const returns = computeRoundReturns(G.round);
 
   // For Sanctiongrad frozen assets: 0% return
-  if (G.country.frozen.w && G.countryKey === 'sanctiongrad' && G.round < 3) returns.w = 0;
+  if (G.country.frozen.w) returns.w = 0;
 
   // Trap penalty
   const trapPen = getTrapPenalty(G.round, opt.name);
@@ -1243,7 +1274,7 @@ function renderResults(alloc, score, grade, growth, liq, safety, settlement, por
   document.getElementById('actionNarrative').innerHTML = actionBlurb ? `<div class="news-panel" style="margin:16px 0"><div class="news-badge">Action Report &mdash; ${ROUND_YEARS[G.round]}</div><div class="headline" style="font-size:16px">${actionBlurb.headline}</div><div class="analyst">${actionBlurb.detail}</div></div>` : '';
 
   // Reflection textarea
-  const refQ = getReflection(G.round, G.countryKey);
+  const refQ = getReflection(G.round, G.countryKey, G.chosenStrategies[G.round].name);
   const refEl = document.getElementById('reflectionArea');
   refEl.innerHTML = `
     <div class="reflection-input">
@@ -1275,7 +1306,7 @@ document.getElementById('btnNext').addEventListener('click', () => {
       _reflections.push({
         round: G.round + 1,
         year: ROUND_YEARS[G.round],
-        question: getReflection(G.round, G.countryKey),
+        question: getReflection(G.round, G.countryKey, G.chosenStrategies[G.round]?.name),
         answer: val
       });
     }
