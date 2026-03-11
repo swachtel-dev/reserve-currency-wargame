@@ -334,7 +334,7 @@ const CAT_NAMES = {w:'Western Reserves',e:'Eastern Currencies',g:'Gold',d:'Digit
 const CAT_SHORT = {w:'Western',e:'Eastern',g:'Gold',d:'Digital'};
 const CAT_COLORS = {w:'var(--west)',e:'var(--east)',g:'var(--gold-c)',d:'var(--digital)'};
 const CAT_INFO = {
-  w:'US Treasuries and euro bonds. The most liquid assets on earth, universally accepted — but fully exposed to Western sanctions.',
+  w:'US Treasuries and euro bonds. The most liquid assets on earth, universally accepted, but fully exposed to Western sanctions.',
   e:'Chinese yuan and BRICS currencies. Growing in acceptance, especially with China and partner nations, but less liquid and subject to capital controls.',
   g:'Physical gold in your vaults. Cannot be frozen or sanctioned by anyone. But earns no income and is slow to convert to cash.',
   d:'Bitcoin and tokenized financial assets. No government can freeze them. High potential returns but extreme volatility and limited settlement acceptance today.'
@@ -363,10 +363,10 @@ function getNews(round, countryKey) {
     { h1:'Western Nations Freeze $300 Billion in Foreign Reserves Overnight',
       h2:'Gold Prices Surge as Central Banks Accelerate Emergency Purchases',
       analyst:'Every reserve manager on earth just learned the same lesson: dollar assets can be turned into weapons.' },
-    { h1:'BRICS Bridge Payment System Goes Live — First Commodity Trades Settled Outside Dollar System',
+    { h1:'BRICS Bridge Payment System Goes Live: First Commodity Trades Settled Outside Dollar System',
       h2:'China Devalues Yuan 4% to Boost Exports, Rattling Partner Nations',
       analyst:'Alternative settlement infrastructure is real now. But the yuan devaluation reminds everyone that non-dollar alternatives carry their own risks.' },
-    { h1:'US Debt-to-GDP Hits 140% — Major Rating Agency Downgrades US Sovereign Credit',
+    { h1:'US Debt-to-GDP Hits 140%: Major Rating Agency Downgrades US Sovereign Credit',
       h2:'Dollar Falls 8% Against Major Currencies in Worst Month Since 2008',
       analyst:'The dollar\'s safe-haven status faces its first serious test in decades. Every reserve portfolio with heavy dollar exposure is underwater.' }
   ];
@@ -375,7 +375,7 @@ function getNews(round, countryKey) {
   const leaderQuotes = {
     petrolistan: [
       { speaker:'Supreme Leader Khalid al-Rashid, Petrolistan',
-        quote:'Our oil has made nations wealthy. Our oil has fueled empires. And yet every barrel we sell enriches a currency we do not control. This is not sovereignty — this is servitude with a premium.' },
+        quote:'Our oil has made nations wealthy. Our oil has fueled empires. And yet every barrel we sell enriches a currency we do not control. This is not sovereignty. It is servitude with a premium.' },
       { speaker:'Supreme Leader Khalid al-Rashid, address to the National Oil Council',
         quote:'They froze $300 billion overnight. Let me be clear: any nation that stores its wealth in another country\'s vault is not a nation. It is a tenant.' },
       { speaker:'Deputy Finance Minister Fatima al-Harbi, Petrolistan Economic Summit',
@@ -387,7 +387,7 @@ function getNews(round, countryKey) {
       { speaker:'President Viktor Volkov, Sanctiongrad State Television',
         quote:'The West calls our economy isolated. I call it liberated. When they froze our reserves, they freed us from the illusion that their system was ever truly ours.' },
       { speaker:'President Viktor Volkov, emergency address from the Obsidian Palace',
-        quote:'They have frozen another nation\'s reserves. Do you see now? What happened to us was not punishment — it was a preview. Every nation that defies them will face the same weapon.' },
+        quote:'They have frozen another nation\'s reserves. Do you see now? What happened to us was not punishment. It was a preview. Every nation that defies them will face the same weapon.' },
       { speaker:'General Secretary of the Sanctiongrad Central Bank, internal briefing (leaked)',
         quote:'BRICS Bridge processed our first commodity settlement today. It is slower, more expensive, and less elegant than SWIFT. But it is ours, and no American official can turn it off with a phone call.' },
       { speaker:'President Viktor Volkov, Victory Day address',
@@ -397,7 +397,7 @@ function getNews(round, countryKey) {
       { speaker:'General Zhao Wei, Dragonia Strategic Reserve Council',
         quote:'We hold $800 billion in American Treasury bonds. If we sell too quickly, we crash the very market our exports depend on. If we hold too long, we watch our wealth evaporate. This is the paradox of the creditor.' },
       { speaker:'Premier Li, closed-door Politburo session (leaked transcript)',
-        quote:'The sanctions on that exporter were a message. Not to them — to us. The Americans are saying: we can do this to anyone. We must ensure they cannot do it to Dragonia.' },
+        quote:'The sanctions on that exporter were a message. Not to them, to us. The Americans are saying: we can do this to anyone. We must ensure they cannot do it to Dragonia.' },
       { speaker:'General Zhao Wei, BRICS Summit keynote',
         quote:'Dragonia did not build BRICS Bridge to destroy the dollar. We built it because no nation should depend on a single payment system it does not control. Redundancy is sovereignty.' },
       { speaker:'Premier Li, address to the National People\'s Assembly',
@@ -409,7 +409,7 @@ function getNews(round, countryKey) {
   const r2Extra = {
     petrolistan: 'Petrolistan Oil Minister Floats Yuan-Denominated Oil Contracts at OPEC Meeting',
     sanctiongrad: 'Sanctiongrad Central Bank Reports 94% of Trade Now Settled Outside Western Systems',
-    dragonia: 'Dragonia Quietly Sells $50B in US Treasuries — Largest Monthly Disposal on Record'
+    dragonia: 'Dragonia Quietly Sells $50B in US Treasuries: Largest Monthly Disposal on Record'
   };
 
   const news = {...base[round]};
@@ -440,14 +440,14 @@ function getReflection(round, countryKey, strategyName) {
     sanctiongrad: [
       'Twenty percent of your reserves are frozen and inaccessible. Of your remaining reserves, what percentage is in assets that no government can seize? Is that enough to sustain trade, or are you trading security for functionality?',
       'New sanctions just froze another country\'s reserves. You\'ve been living under sanctions already. Has your experience under sanctions prepared you for this moment, or has it just shifted your vulnerability from Western sanctions to Chinese dependence?',
-      'BRICS Bridge is live. For Sanctiongrad, this isn\'t an opportunity — it\'s a lifeline. But China controls significant parts of this infrastructure. How is depending on BRICS Bridge different from depending on SWIFT? Is it different?',
-      null // R4 handled below — depends on strategy choice
+      'BRICS Bridge is live. For Sanctiongrad, this isn\'t an opportunity. It\'s a lifeline. But China controls significant parts of this infrastructure. How is depending on BRICS Bridge different from depending on SWIFT? Is it different?',
+      null // R4 handled below; depends on strategy choice
     ],
     dragonia: [
-      'Dragonia holds the world\'s largest Treasury stockpile. If you started selling aggressively, Treasury prices would fall — destroying the value of your remaining holdings. How does this "dollar trap" constrain your options in ways other countries don\'t face?',
+      'Dragonia holds the world\'s largest Treasury stockpile. If you started selling aggressively, Treasury prices would fall, destroying the value of your remaining holdings. How does this "dollar trap" constrain your options in ways other countries don\'t face?',
       'The Dragon Council is debating whether the sanctions on that commodity exporter were a warning aimed at Dragonia. General Zhao thinks yes. The Trade Minister thinks the US would never sanction its largest trading partner. Who do you agree with, and how should that belief shape your reserve strategy?',
       'You helped build BRICS Bridge. Now it\'s live. But China just devalued the yuan 4%, hurting every country that held yuan reserves on your recommendation. How does this devaluation affect Dragonia\'s credibility as a leader of the alternative financial system?',
-      'The dollar is falling. Dragonia\'s remaining Treasury holdings are losing value daily. But a weaker dollar also means weaker American demand for Dragonian exports. You\'re caught between two losses. Which one hurts more, and what does that tell you about the real purpose of reserves — investment returns or trade facilitation?'
+      'The dollar is falling. Dragonia\'s remaining Treasury holdings are losing value daily. But a weaker dollar also means weaker American demand for Dragonian exports. You\'re caught between two losses. Which one hurts more, and what does that tell you about the real purpose of reserves: investment returns or trade facilitation?'
     ]
   };
 
@@ -471,7 +471,7 @@ function getReflection(round, countryKey, strategyName) {
 const COUNTRIES = {
   petrolistan: {
     name:'Petrolistan', flag:'\u{1F3ED}',
-    flavor:'An ancient civilization built on oil. Your petroleum revenues fund everything — hospitals, roads, universities. But every barrel is priced in US dollars, tying your prosperity to a currency controlled by a rival power.',
+    flavor:'An ancient civilization built on oil. Your petroleum revenues fund everything: hospitals, roads, universities. But every barrel is priced in US dollars, tying your prosperity to a currency controlled by a rival power.',
     tension:'Your oil is priced in dollars. Your independence demands alternatives. Every barrel sold tightens the knot.',
     leader:'Supreme Leader Khalid al-Rashid',
     startAlloc:{w:65,e:10,g:15,d:10},
@@ -481,32 +481,32 @@ const COUNTRIES = {
     outcomes:{
       good:'Oil revenues are flowing and all import channels are open. Hospitals are stocked, infrastructure projects on schedule. The Supreme Economic Council commends your stewardship.',
       ok:'Oil revenues continue, but pharmaceutical imports from Europe are slow and technology transfers from Western nations are getting complicated. Workarounds exist but cost money.',
-      bad:'Import channels are breaking down. Medicine shortages reported in three provinces. Technology imports for your oil infrastructure are delayed — the very equipment that keeps the revenue flowing. The Economic Council demands answers.'
+      bad:'Import channels are breaking down. Medicine shortages reported in three provinces. Technology imports for your oil infrastructure are delayed, the very equipment that keeps the revenue flowing. The Economic Council demands answers.'
     },
     // R2 provocation: Petrolistan's leader provokes sanctions
     r2Provocation:'Supreme Leader Khalid announces that Petrolistan will impose a 15% "sovereignty tariff" on all ships transiting the Strait of Rashid, payable only in gold or yuan. Western nations call it piracy. Oil prices spike 12%.',
     strategies:[
       // R1 — baseline
-      [{name:'Dollar Anchor',tag:'The dollar pays our bills. Don\'t fix what isn\'t broken.',alloc:{w:65,e:10,g:15,d:10},pros:['Maximum liquidity — reserves instantly mobilizable','Strong yield from US Treasury bonds'],cons:['65% of reserves vulnerable to sanctions','Fully dependent on Western financial system']},
+      [{name:'Dollar Anchor',tag:'The dollar pays our bills. Don\'t fix what isn\'t broken.',alloc:{w:65,e:10,g:15,d:10},pros:['Maximum liquidity: reserves instantly mobilizable','Strong yield from US Treasury bonds'],cons:['65% of reserves vulnerable to sanctions','Fully dependent on Western financial system']},
        {name:'Cautious Diversifier',tag:'Reduce dependence before we\'re forced to.',alloc:{w:45,e:25,g:20,d:10},pros:['Builds settlement with China, your biggest trade partner','Cuts sanctions exposure nearly in half'],cons:['Rebalancing cost from selling Western assets','Eastern currencies are less liquid in a crisis']},
        {name:'Bold Modernizer',tag:'Digital assets can\'t be sanctioned. Position while others hesitate.',alloc:{w:40,e:15,g:20,d:25},pros:['No government can freeze bitcoin or tokenized assets','If digital settlement takes off, you\'re years ahead'],cons:['Digital assets could lose 20-30% in a single year','Very few trade partners accept digital payment today']}],
       // R2 — sanctions hit (Khalid provoked them)
-      [{name:'Steady Hand',tag:'Stay calm. The tariff revenue is worth the diplomatic noise.',alloc:{w:50,e:20,g:20,d:10},pros:['Maintains strong liquidity position','Signals stability to credit markets'],cons:['Western nations are furious — sanctions risk is real','Over half still exposed if they retaliate']},
-       {name:'Swift Pivot',tag:'We poked the bear. Now move our money before they freeze it.',alloc:{w:25,e:35,g:25,d:15},pros:['Dramatic sanctions reduction — only 25% exposed','Builds deep China/BRICS settlement'],cons:['Major rebalancing cost from selling at speed','Heavy dependence on Chinese financial system']},
+      [{name:'Steady Hand',tag:'Stay calm. The tariff revenue is worth the diplomatic noise.',alloc:{w:50,e:20,g:20,d:10},pros:['Maintains strong liquidity position','Signals stability to credit markets'],cons:['Western nations are furious and sanctions risk is real','Over half still exposed if they retaliate']},
+       {name:'Swift Pivot',tag:'We poked the bear. Now move our money before they freeze it.',alloc:{w:25,e:35,g:25,d:15},pros:['Dramatic sanctions reduction: only 25% exposed','Builds deep China/BRICS settlement'],cons:['Major rebalancing cost from selling at speed','Heavy dependence on Chinese financial system']},
        {name:'Fortress Dollar',tag:'Double down. The West won\'t sanction the world\'s oil supply. They need us.',alloc:{w:70,e:5,g:15,d:10},isTrap:true,pros:['If you\'re right, maximum returns and liquidity','Shows confidence in the relationship'],cons:['If you\'re wrong, 70% of reserves could be frozen','You just imposed a tariff that enraged Western capitals']}],
       // R3
-      [{name:'Watch and Wait',tag:'BRICS is promising. Let others test it first.',alloc:{w:40,e:25,g:20,d:15},pros:['Balanced position — no extreme exposure','Lower rebalancing cost than aggressive shifts'],cons:['Not positioned to benefit from BRICS Bridge','Still 40% exposed to Western sanctions risk']},
+      [{name:'Watch and Wait',tag:'BRICS is promising. Let others test it first.',alloc:{w:40,e:25,g:20,d:15},pros:['Balanced position with no extreme exposure','Lower rebalancing cost than aggressive shifts'],cons:['Not positioned to benefit from BRICS Bridge','Still 40% exposed to Western sanctions risk']},
        {name:'Full BRICS',tag:'Our biggest trade partner is China. Match reserves to reality.',alloc:{w:20,e:40,g:20,d:20},pros:['Excellent settlement with China (35% of your trade)','Very low sanctions exposure'],cons:['If China devalues again, 40% of reserves lose value','Low Western liquidity if you need dollars fast']},
        {name:'Digital Bridge',tag:'Tokenized settlement could bypass both dollar and yuan.',alloc:{w:25,e:20,g:20,d:35},pros:['Independent of both Western and Chinese systems','Digital settlement is growing rapidly'],cons:['Highest volatility of any strategy','Unproven at the scale of national reserves']}],
       // R4
-      [{name:'Ride It Out',tag:'Dollar crises come and go. Don\'t sell at the bottom.',alloc:{w:30,e:25,g:30,d:15},pros:['Avoids panic selling at worst prices','Gold hedge protects against dollar decline'],cons:['Dollar is actively falling — every day costs money','If this is structural, not cyclical, you\'re caught']},
-       {name:'Emergency Exit',tag:'The dollar era is ending. Get out while you still can.',alloc:{w:10,e:35,g:35,d:20},pros:['Minimal dollar exposure during the crisis','Heavy gold position thrives in uncertainty'],cons:['Massive rebalancing cost — selling at the bottom','Almost no Western liquidity if you need dollars']},
+      [{name:'Ride It Out',tag:'Dollar crises come and go. Don\'t sell at the bottom.',alloc:{w:30,e:25,g:30,d:15},pros:['Avoids panic selling at worst prices','Gold hedge protects against dollar decline'],cons:['Dollar is actively falling and every day costs money','If this is structural, not cyclical, you\'re caught']},
+       {name:'Emergency Exit',tag:'The dollar era is ending. Get out while you still can.',alloc:{w:10,e:35,g:35,d:20},pros:['Minimal dollar exposure during the crisis','Heavy gold position thrives in uncertainty'],cons:['Massive rebalancing cost from selling at the bottom','Almost no Western liquidity if you need dollars']},
        {name:'Full Crypto',tag:'Bitcoin is up 30%. Go all in on the future.',alloc:{w:10,e:10,g:15,d:65},isTrap:true,pros:['Digital assets are surging during the crisis','Maximum independence from all sovereign currencies'],cons:['65% in assets that could crash 40% overnight','Almost zero trade partners accept digital settlement']}]
     ]
   },
   sanctiongrad: {
     name:'Sanctiongrad', flag:'\u{1F3D8}\uFE0F',
-    flavor:'A resource empire under siege. When Western nations froze 20% of your reserves overnight, it was a lesson in what "safe assets" really means. Now you manage what\'s left — constrained, creative, and fighting for survival.',
+    flavor:'A resource empire under siege. When Western nations froze 20% of your reserves overnight, it was a lesson in what "safe assets" really means. Now you manage what\'s left: constrained, creative, and fighting for survival.',
     tension:'20% of your reserves are frozen. You cannot touch your Western holdings. Every alternative has a cost.',
     leader:'President Viktor Volkov',
     startAlloc:{w:20,e:25,g:40,d:15},
@@ -521,9 +521,9 @@ const COUNTRIES = {
     r2Provocation:'President Volkov announces Sanctiongrad will nationalize all remaining Western corporate assets and redirect energy exports exclusively to "friendly nations." Western media calls it economic warfare.',
     strategies:[
       // R1
-      [{name:'Gold Standard',tag:'Gold is the one asset nobody can take from us.',alloc:{w:20,e:20,g:45,d:15},pros:['Maximizes the asset no sanctions can touch','Gold is liquid enough for slow but steady trade'],cons:['Gold earns nothing — your reserves don\'t grow','Difficult to pay for time-sensitive imports']},
+      [{name:'Gold Standard',tag:'Gold is the one asset nobody can take from us.',alloc:{w:20,e:20,g:45,d:15},pros:['Maximizes the asset no sanctions can touch','Gold is liquid enough for slow but steady trade'],cons:['Gold earns nothing, so your reserves don\'t grow','Difficult to pay for time-sensitive imports']},
        {name:'Eastern Alliance',tag:'China is our lifeline. Invest in that relationship.',alloc:{w:20,e:40,g:25,d:15},pros:['Strong settlement with China (45% of your trade)','Yuan reserves are growing in acceptance globally'],cons:['Extreme dependence on a single partner','If China\'s interests diverge, you\'re exposed']},
-       {name:'Digital Sovereignty',tag:'If the old system locked us out, we\'ll build a new one.',alloc:{w:20,e:20,g:30,d:30},pros:['Blockchain assets exist outside all sanctions regimes','Positions for tokenized settlement future'],cons:['Extreme volatility — reserves could swing wildly','Almost nobody accepts digital payment for commodities']}],
+       {name:'Digital Sovereignty',tag:'If the old system locked us out, we\'ll build a new one.',alloc:{w:20,e:20,g:30,d:30},pros:['Blockchain assets exist outside all sanctions regimes','Positions for tokenized settlement future'],cons:['Extreme volatility: reserves could swing wildly','Almost nobody accepts digital payment for commodities']}],
       // R2
       [{name:'Double Down Gold',tag:'The world just proved gold\'s value again. Stack more.',alloc:{w:20,e:20,g:50,d:10},pros:['50% in the ultimate sanctions-proof asset','Gold is surging globally right now'],cons:['Half your reserves earn zero yield','Very limited settlement utility']},
        {name:'Deepen China Ties',tag:'China is the only major economy trading with us freely.',alloc:{w:20,e:45,g:20,d:15},pros:['Excellent settlement with dominant trade partner','Benefits from BRICS system development'],cons:['If China pressures you politically, no leverage','Yuan capital controls could trap your reserves']},
@@ -533,14 +533,14 @@ const COUNTRIES = {
        {name:'All In BRICS',tag:'The new system is live. Go all in.',alloc:{w:20,e:50,g:15,d:15},pros:['Maximum settlement with BRICS partners','Eastern liquidity just improved dramatically'],cons:['50% in currencies with capital controls','If BRICS Bridge has problems, you\'re overexposed']},
        {name:'Tech Leapfrog',tag:'Skip traditional banking entirely. Go digital.',alloc:{w:20,e:20,g:20,d:40},pros:['Maximum independence from ALL traditional systems','Digital settlement is growing rapidly'],cons:['Extreme volatility risk with 40% digital','Most trade partners still prefer traditional settlement']}],
       // R4
-      [{name:'Accept the Deal',tag:'Accept sanctions relief. Regain Western access.',alloc:{w:30,e:25,g:30,d:15},unfreezes:true,pros:['Western reserves UNFREEZE — 30% is now accessible','Dramatically improves liquidity and settlement'],cons:['You owe energy concessions to Europe','Back under Western financial influence']},
-       {name:'Stay Independent',tag:'We survived without them. Keep building alternatives.',alloc:{w:20,e:35,g:30,d:15},pros:['Maintains complete independence','No political concessions required'],cons:['Frozen reserves stay frozen — that money is gone','Limited Western technology imports continue']},
+      [{name:'Accept the Deal',tag:'Accept sanctions relief. Regain Western access.',alloc:{w:30,e:25,g:30,d:15},unfreezes:true,pros:['Western reserves UNFREEZE: 30% is now accessible','Dramatically improves liquidity and settlement'],cons:['You owe energy concessions to Europe','Back under Western financial influence']},
+       {name:'Stay Independent',tag:'We survived without them. Keep building alternatives.',alloc:{w:20,e:35,g:30,d:15},pros:['Maintains complete independence','No political concessions required'],cons:['Frozen reserves stay frozen; that money is gone','Limited Western technology imports continue']},
        {name:'Victory Lap',tag:'The dollar is collapsing. Bet everything on the new order.',alloc:{w:20,e:20,g:15,d:45},isTrap:true,pros:['Dollar crisis "validates" your worldview','Digital assets surging in the chaos'],cons:['45% in assets your people can\'t spend','Celebrating while bread lines form is... a choice']}]
     ]
   },
   dragonia: {
     name:'Dragonia', flag:'\u{1F409}',
-    flavor:'The world\'s factory. Your ports ship goods to every continent, and your reserves are the largest on earth. But $800 billion in US Treasuries is both a safety net and a trap — sell too fast and you crash the very markets your exporters depend on.',
+    flavor:'The world\'s factory. Your ports ship goods to every continent, and your reserves are the largest on earth. But $800 billion in US Treasuries is both a safety net and a trap: sell too fast and you crash the very markets your exporters depend on.',
     tension:'You hold $800B in Treasuries. Selling them crashes the markets your own exports depend on. Diversify without breaking the system.',
     leader:'General Zhao Wei, Strategic Reserve Council',
     startAlloc:{w:60,e:10,g:15,d:15},
@@ -561,10 +561,10 @@ const COUNTRIES = {
       // R2
       [{name:'Diplomatic Balance',tag:'Stay neutral. Hedge with gold. Don\'t take sides.',alloc:{w:45,e:20,g:25,d:10},pros:['Maintains relationships with both blocs','Gold hedge against geopolitical uncertainty'],cons:['Still heavily exposed to dollar sanctions risk','Not building settlement with Eastern partners']},
        {name:'Accelerate East',tag:'Sanctions prove dollars are weapons. Speed up the transition.',alloc:{w:30,e:35,g:20,d:15},pros:['Strong pivot toward trading partner settlement','Significantly reduced sanctions exposure'],cons:['Selling Treasuries in uncertain market','Growing dependence on yuan with capital controls']},
-       {name:'Treasury Fortress',tag:'We\'re too big to sanction. Buy MORE Treasuries at discount.',alloc:{w:65,e:10,g:15,d:10},isTrap:true,pros:['Treasuries are cheaper after the panic — buy low','Signals confidence in US-Dragonia relationship'],cons:['65% in the asset class that just got weaponized','If you\'re wrong about being "too big to sanction"...']}],
+       {name:'Treasury Fortress',tag:'We\'re too big to sanction. Buy MORE Treasuries at discount.',alloc:{w:65,e:10,g:15,d:10},isTrap:true,pros:['Treasuries are cheaper after the panic, so buy low','Signals confidence in US-Dragonia relationship'],cons:['65% in the asset class that just got weaponized','If you\'re wrong about being "too big to sanction"...']}],
       // R3
       [{name:'Patient Builder',tag:'BRICS is live. Shift steadily as infrastructure matures.',alloc:{w:35,e:30,g:20,d:15},pros:['Positioned to benefit from BRICS Bridge','Balanced and diversified portfolio'],cons:['Still significant Western exposure','Not fully committed to system you helped build']},
-       {name:'BRICS Architect',tag:'We built this system. Time to use it.',alloc:{w:20,e:40,g:15,d:25},pros:['Maximum benefit from BRICS Bridge launch','Strong settlement with ASEAN and Other partners'],cons:['Only 20% Western — limited dollar liquidity','If BRICS has growing pains, heavily exposed']},
+       {name:'BRICS Architect',tag:'We built this system. Time to use it.',alloc:{w:20,e:40,g:15,d:25},pros:['Maximum benefit from BRICS Bridge launch','Strong settlement with ASEAN and Other partners'],cons:['Only 20% Western, limiting dollar liquidity','If BRICS has growing pains, heavily exposed']},
        {name:'Digital Yuan Push',tag:'Make the digital yuan the world\'s settlement standard.',alloc:{w:25,e:20,g:15,d:40},pros:['Digital infrastructure + yuan internationalization','Leadership in next-generation settlement'],cons:['40% in highly volatile digital assets','Enormous risk if tokenized markets stumble']}],
       // R4
       [{name:'Managed Retreat',tag:'Sell Treasuries in an orderly fashion. Don\'t cause a panic.',alloc:{w:25,e:30,g:30,d:15},pros:['Orderly reduction minimizes market impact','Strong gold and Eastern position for crisis'],cons:['Still holding depreciating dollars','Slow approach means taking losses daily']},
@@ -678,7 +678,7 @@ function getMetricBulletin(metric, value, countryKey) {
       safety_high: 'Petrolistan\'s reserves are largely beyond Western reach. Financial analysts note the country has quietly become "sanctions-proof" without making headlines.',
       liquidity_low: 'Petrolistan\'s reserve manager struggles to liquidate gold holdings fast enough to cover an emergency oil infrastructure repair. A critical desalination plant waits three weeks for parts.',
       liquidity_high: 'Petrolistan deploys reserves within hours to secure emergency grain shipments after a regional drought. High liquidity means fast response.',
-      growth_low: 'Petrolistan\'s sovereign wealth fund reports its worst quarterly return in a decade. Opposition newspapers — published abroad — call it "the price of ideology over arithmetic."',
+      growth_low: 'Petrolistan\'s sovereign wealth fund reports its worst quarterly return in a decade. Opposition newspapers (published abroad) call it "the price of ideology over arithmetic."',
       growth_high: 'Petrolistan\'s reserves are outperforming regional peers. The Economic Council approves a new university campus funded entirely from reserve returns.'
     },
     sanctiongrad: {
@@ -730,9 +730,9 @@ function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
 
   const narratives = {
     petrolistan: {
-      bigWestSell: {headline:'Petrolistan Central Bank Sells $'+Math.abs(wDelta)+'B in Western Assets — Largest Divestment in National History', detail:'Currency traders describe "orderly but urgent" selling. The Petrolistan sovereign wealth fund quietly moved billions out of New York through intermediary banks in Abu Dhabi. Western financial press calls it "a vote of no confidence in the dollar system."'},
+      bigWestSell: {headline:'Petrolistan Central Bank Sells $'+Math.abs(wDelta)+'B in Western Assets: Largest Divestment in National History', detail:'Currency traders describe "orderly but urgent" selling. The Petrolistan sovereign wealth fund quietly moved billions out of New York through intermediary banks in Abu Dhabi. Western financial press calls it "a vote of no confidence in the dollar system."'},
       bigEastBuy: {headline:'Petrolistan Signs Yuan Swap Agreement Worth $'+Math.abs(eDelta)+'B with People\'s Bank of China', detail:'The Supreme Economic Council approved the agreement at dawn. Oil deliveries to Shanghai will now settle in yuan within 48 hours. Western diplomats are "deeply concerned."'},
-      bigGoldBuy: {headline:'Gold Shipments Arrive at Petrolistan Central Vault — '+Math.abs(gDelta)+'% of Reserves Now in Physical Metal', detail:'Armored convoys from Swiss refineries delivered 200 tonnes of gold bars to the underground vault beneath the Finance Ministry. Security footage (leaked) shows pallets being lowered by crane.'},
+      bigGoldBuy: {headline:'Gold Shipments Arrive at Petrolistan Central Vault: '+Math.abs(gDelta)+'% of Reserves Now in Physical Metal', detail:'Armored convoys from Swiss refineries delivered 200 tonnes of gold bars to the underground vault beneath the Finance Ministry. Security footage (leaked) shows pallets being lowered by crane.'},
       bigDigitalBuy: {headline:'Petrolistan Sovereign Fund Makes Historic Digital Asset Acquisition', detail:'The fund purchased a mix of Bitcoin and tokenized treasury instruments through offshore exchanges. Financial analysts are divided: "visionary" or "reckless."'},
       trapFortress: {headline:'Petrolistan DOUBLES DOWN on Dollar Holdings Despite Sanctions Threat', detail:'In a move that stunned financial analysts, the reserve manager increased Western asset holdings even as sanctions negotiations escalated. Western media: "Either brilliant confidence or catastrophic hubris." The Supreme Leader reportedly nodded approvingly.'},
       trapCrypto: {headline:'Petrolistan Bets National Reserves on Cryptocurrency in Unprecedented Move', detail:'65% of the nation\'s reserves are now in digital assets. The Financial Times calls it "the most aggressive sovereign crypto bet in history." Medical supply chains now depend on the price of Bitcoin holding above $80,000.'}
@@ -741,15 +741,15 @@ function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
       bigEastBuy: {headline:'Sanctiongrad and China Sign Expanded Bilateral Currency Agreement', detail:'The deal, signed in the Obsidian Palace, allows direct ruble-yuan conversion for commodity trade. President Volkov called it "the architecture of a new financial order." Chinese state media was more restrained: "a pragmatic arrangement."'},
       bigGoldBuy: {headline:'Sanctiongrad Central Bank Adds Gold as Sanctions Workaround', detail:'With Western reserves frozen and alternatives limited, the central bank increased gold reserves through purchases from Central Asian mining operations. Settlement is slow but sanctions-proof.'},
       bigDigitalBuy: {headline:'Sanctiongrad Quietly Builds Cryptocurrency Reserve Through Mining Operations', detail:'State-backed mining facilities in Siberia are generating Bitcoin at scale. The energy cost is enormous, but the assets are beyond anyone\'s reach. President Volkov: "They cannot freeze what they cannot find."'},
-      trapBurn: {headline:'Sanctiongrad Goes All-In on Digital Independence — Economists Sound Alarm', detail:'With 40% of reserves in digital assets, Sanctiongrad has the most aggressive crypto allocation of any sovereign entity. Opposition economists (writing abroad) warn: "You cannot buy bread with Bitcoin."'},
+      trapBurn: {headline:'Sanctiongrad Goes All-In on Digital Independence as Economists Sound Alarm', detail:'With 40% of reserves in digital assets, Sanctiongrad has the most aggressive crypto allocation of any sovereign entity. Opposition economists (writing abroad) warn: "You cannot buy bread with Bitcoin."'},
       trapVictory: {headline:'Victory Lap: Sanctiongrad Celebrates Dollar Decline While Economy Stalls', detail:'State television broadcasts President Volkov\'s triumphant address from Red Square. Meanwhile, grocery store shelves in smaller cities grow emptier. 45% of reserves are in digital assets most trade partners refuse to accept.'}
     },
     dragonia: {
-      bigWestSell: {headline:'Dragonia Sells $'+Math.abs(wDelta)+'B in US Treasuries — Bond Markets Shudder', detail:'The sell-off was executed through multiple channels over 72 hours. Treasury yields spiked 15 basis points before stabilizing. The White House issued a statement urging "continued partnership." General Zhao declined to comment.'},
+      bigWestSell: {headline:'Dragonia Sells $'+Math.abs(wDelta)+'B in US Treasuries as Bond Markets Shudder', detail:'The sell-off was executed through multiple channels over 72 hours. Treasury yields spiked 15 basis points before stabilizing. The White House issued a statement urging "continued partnership." General Zhao declined to comment.'},
       bigEastBuy: {headline:'Dragonia Redirects Reserves Toward BRICS Partners and Digital Yuan Infrastructure', detail:'The Strategic Reserve Council approved a major rebalancing. Eastern currency reserves will now support the BRICS Bridge payment system that Dragonia helped design. Premier Li: "We are simply matching our reserves to our trade reality."'},
-      bigGoldBuy: {headline:'Dragonia Gold Reserves Hit Record — Central Bank Buys Through Shanghai Gold Exchange', detail:'Analysts estimate Dragonia added '+Math.abs(gDelta)+' percentage points of gold to reserves this year alone. The gold is stored domestically in vaults the West cannot touch.'},
-      bigDigitalBuy: {headline:'Dragonia Launches Sovereign Digital Asset Portfolio — Largest in History', detail:'The Dragon Council authorized the creation of a digital asset reserve managed by a new government agency. Both Bitcoin and tokenized instruments are included. General Zhao: "If we do not lead this transition, someone else will."'},
-      trapFortress: {headline:'Dragonia INCREASES Treasury Holdings to 65% — "Too Big to Sanction" Strategy', detail:'In a move that baffled analysts, Dragonia bought discounted Treasuries during the sanctions panic. The bet: America would never sanction its largest creditor. Leaked Pentagon memo suggests some in Washington are exploring exactly that option.'},
+      bigGoldBuy: {headline:'Dragonia Gold Reserves Hit Record: Central Bank Buys Through Shanghai Gold Exchange', detail:'Analysts estimate Dragonia added '+Math.abs(gDelta)+' percentage points of gold to reserves this year alone. The gold is stored domestically in vaults the West cannot touch.'},
+      bigDigitalBuy: {headline:'Dragonia Launches Sovereign Digital Asset Portfolio, Largest in History', detail:'The Dragon Council authorized the creation of a digital asset reserve managed by a new government agency. Both Bitcoin and tokenized instruments are included. General Zhao: "If we do not lead this transition, someone else will."'},
+      trapFortress: {headline:'Dragonia INCREASES Treasury Holdings to 65% in "Too Big to Sanction" Strategy', detail:'In a move that baffled analysts, Dragonia bought discounted Treasuries during the sanctions panic. The bet: America would never sanction its largest creditor. Leaked Pentagon memo suggests some in Washington are exploring exactly that option.'},
       trapDigital: {headline:'Dragonia Bets 60% of World\'s Largest Reserves on Digital Assets', detail:'The most consequential financial decision of the decade. If it works, Dragonia becomes the architect of a post-dollar settlement system. If it fails, factory workers across 15 provinces pay the price.'}
     }
   };
@@ -758,7 +758,7 @@ function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
   if (!cn) return null;
 
   // Special narratives
-  if (stratName === 'Accept the Deal') return {headline:'BREAKING: Sanctiongrad Accepts Western Sanctions Relief — Frozen Reserves to Be Released', detail:'In a dramatic reversal, President Volkov signed an energy concession agreement with the European Union in exchange for the unfreezing of Sanctiongrad\'s Western reserves. Volkov called it "a pragmatic decision for our people." Opposition figures call it surrender. Western goods are expected to return to stores within weeks. The reserve manager breathes for the first time in years.'};
+  if (stratName === 'Accept the Deal') return {headline:'BREAKING: Sanctiongrad Accepts Western Sanctions Relief, Frozen Reserves to Be Released', detail:'In a dramatic reversal, President Volkov signed an energy concession agreement with the European Union in exchange for the unfreezing of Sanctiongrad\'s Western reserves. Volkov called it "a pragmatic decision for our people." Opposition figures call it surrender. Western goods are expected to return to stores within weeks. The reserve manager breathes for the first time in years.'};
   if (stratName === 'Fortress Dollar' || stratName === 'Treasury Fortress') return cn.trapFortress;
   if (stratName === 'Full Crypto') return cn.trapCrypto;
   if (stratName === 'Burn the Ships') return cn.trapBurn;
@@ -786,8 +786,8 @@ function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
 function getEpilogue(countryKey, finalGrade, strategies) {
   const epilogues = {
     petrolistan: {
-      A: 'Petrolistan enters 2030 as the model for successful reserve diversification. The Supreme Economic Council publishes a white paper — now studied in central banking courses worldwide — on how an oil-dependent economy built genuine financial independence without abandoning its core revenue stream. Supreme Leader Khalid claims credit. Hospitals are stocked, infrastructure projects ahead of schedule, and Petrolistan\'s oil is now priced in a basket of currencies. Western analysts grudgingly admit: "They did it right."',
-      B: 'Petrolistan is stable but not triumphant. Import channels function, oil revenues flow, but the transition to a diversified reserve base is incomplete. Some provinces still face occasional medicine delays. The Supreme Leader declares victory anyway, but the reserve manager knows the real work — building settlement infrastructure with non-Western partners — will take another decade.',
+      A: 'Petrolistan enters 2030 as the model for successful reserve diversification. The Supreme Economic Council publishes a white paper (now studied in central banking courses worldwide) on how an oil-dependent economy built genuine financial independence without abandoning its core revenue stream. Supreme Leader Khalid claims credit. Hospitals are stocked, infrastructure projects ahead of schedule, and Petrolistan\'s oil is now priced in a basket of currencies. Western analysts grudgingly admit: "They did it right."',
+      B: 'Petrolistan is stable but not triumphant. Import channels function, oil revenues flow, but the transition to a diversified reserve base is incomplete. Some provinces still face occasional medicine delays. The Supreme Leader declares victory anyway, but the reserve manager knows the real work (building settlement infrastructure with non-Western partners) will take another decade.',
       C: 'Petrolistan survives but bears scars. The reserve portfolio held together under pressure, but inefficiencies cost the nation billions in missed returns and settlement delays. Oil infrastructure upgrades are behind schedule due to parts shortages. The Supreme Economic Council privately discusses replacing the reserve manager. The transition to a post-dollar world is happening, but Petrolistan is following rather than leading.',
       D: 'Petrolistan is struggling. Import channels are unreliable, medicine shortages are becoming normalized, and oil infrastructure maintenance has been deferred for the third consecutive year. The Supreme Leader blames foreign adversaries, but internal memos point to reserve management failures. Young professionals are emigrating. The reserve portfolio needs years to recover.',
       F: 'Petrolistan faces a humanitarian crisis. Oil production is declining because maintenance equipment cannot be imported. Hospital pharmacies are rationing basic medications. The Supreme Leader has declared a "state of economic emergency" and is negotiating with anyone who will listen. The reserve manager has been replaced. Twice.'
@@ -797,8 +797,8 @@ function getEpilogue(countryKey, finalGrade, strategies) {
       A: 'Dragonia enters 2030 as the architect of the new financial order it spent a decade building. BRICS Bridge processes trillions in trade. The digital yuan is accepted across Southeast Asia. The Treasury selloff was managed so smoothly that markets barely noticed. General Zhao is promoted. Premier Li addresses the National People\'s Assembly: "The era of dependence on any single currency is over. Dragonia\'s reserves serve Dragonia."',
       B: 'Dragonia has navigated the transition competently. The BRICS payment system works. Factories run. Exports flow. But the Treasury selloff took longer than planned and cost more than projected. The relationship with Washington is strained, and some ASEAN partners are wary of yuan dependence. General Zhao keeps a lower profile now. The transition isn\'t complete, but the direction is irreversible.',
       C: 'Dragonia\'s transition is half-finished. Export supply chains function but with growing friction. The Treasury portfolio lost more value than the Dragon Council was told to expect. BRICS Bridge works for some trades but not all. General Zhao faces pointed questions at every council meeting. The strategy was sound in theory but execution was uneven.',
-      D: 'Dragonia\'s reserves are bleeding value. The Treasury selloff was poorly timed, BRICS Bridge adoption is slower than planned, and factories in three provinces face periodic shutdowns from raw material payment delays. Premier Li cancels a planned overseas trip. General Zhao offers his resignation. It is not accepted — but it is not forgotten either.',
-      F: 'Dragonia faces its worst economic crisis in three decades. Manufacturing output has fallen sharply as supply chains break down. The massive digital asset bet (or the failed Treasury strategy) has erased hundreds of billions in reserve value. Unemployment protests — rare and alarming — appear in industrial cities. The Dragon Council meets in emergency session. The era of easy growth is over, and the reserve portfolio that was supposed to insulate the economy has instead become the problem.'
+      D: 'Dragonia\'s reserves are bleeding value. The Treasury selloff was poorly timed, BRICS Bridge adoption is slower than planned, and factories in three provinces face periodic shutdowns from raw material payment delays. Premier Li cancels a planned overseas trip. General Zhao offers his resignation. It is not accepted, but it is not forgotten either.',
+      F: 'Dragonia faces its worst economic crisis in three decades. Manufacturing output has fallen sharply as supply chains break down. The massive digital asset bet (or the failed Treasury strategy) has erased hundreds of billions in reserve value. Unemployment protests (rare and alarming) appear in industrial cities. The Dragon Council meets in emergency session. The era of easy growth is over, and the reserve portfolio that was supposed to insulate the economy has instead become the problem.'
     }
   };
 
@@ -807,16 +807,16 @@ function getEpilogue(countryKey, finalGrade, strategies) {
     const tookDeal = strategies.some(s => s.name === 'Accept the Deal');
     if (tookDeal) {
       const dealEpilogues = {
-        A: 'Sanctiongrad re-enters the global financial system on surprisingly favorable terms. The energy concessions to Europe were painful, but the unfrozen reserves — combined with the alternative infrastructure built during the sanctions years — give Volkov genuine leverage. Western goods flow again. Semiconductors arrive. Hospitals restock. The irony is not lost on analysts: Sanctiongrad\'s years of forced independence gave it bargaining power it never would have had otherwise. Volkov tells state media it was "the plan all along." It wasn\'t, but the result speaks for itself.',
-        B: 'The deal with the West is working, mostly. Frozen reserves are accessible again, and Western imports are resuming. But the energy concessions sting, and Volkov\'s nationalist base is restless. The economy is recovering, but the scars of sanctions remain — supply chains rebuilt around Chinese partners don\'t easily reorient westward. Sanctiongrad is no longer isolated, but it\'s not fully reintegrated either. It occupies an uncomfortable middle ground.',
+        A: 'Sanctiongrad re-enters the global financial system on surprisingly favorable terms. The energy concessions to Europe were painful, but the unfrozen reserves, combined with the alternative infrastructure built during the sanctions years, give Volkov genuine leverage. Western goods flow again. Semiconductors arrive. Hospitals restock. The irony is not lost on analysts: Sanctiongrad\'s years of forced independence gave it bargaining power it never would have had otherwise. Volkov tells state media it was "the plan all along." It wasn\'t, but the result speaks for itself.',
+        B: 'The deal with the West is working, mostly. Frozen reserves are accessible again, and Western imports are resuming. But the energy concessions sting, and Volkov\'s nationalist base is restless. The economy is recovering, but the scars of sanctions remain. Supply chains rebuilt around Chinese partners don\'t easily reorient westward. Sanctiongrad is no longer isolated, but it\'s not fully reintegrated either. It occupies an uncomfortable middle ground.',
         C: 'Sanctions relief came, but not salvation. The unfrozen reserves helped stabilize the economy, but years of isolation left structural damage that money alone cannot fix. Skilled workers emigrated. Factories retooled for Chinese components that Western replacements don\'t fit. The deal stopped the bleeding, but recovery will take years. Volkov declares victory on television; the finance ministry\'s internal projections are less optimistic.',
         D: 'The deal came too late. By the time Western reserves were unfrozen, the economy had deteriorated beyond what a financial injection could repair. Consumer goods are returning to shelves, but factories that closed during the sanctions years do not simply reopen. The reserve portfolio stabilized, but the real economy is still in recession. Volkov accepted the deal from weakness, and everyone knows it.',
-        F: 'The deal was signed in desperation. Sanctiongrad made enormous energy concessions to Europe for sanctions relief, but the economy was already in freefall. Unfrozen reserves covered emergency imports for six months before running low. The parallel systems built during the sanctions years collapsed once the political will to maintain them evaporated. Sanctiongrad is financially dependent on the West again — exactly where it started, but poorer.'
+        F: 'The deal was signed in desperation. Sanctiongrad made enormous energy concessions to Europe for sanctions relief, but the economy was already in freefall. Unfrozen reserves covered emergency imports for six months before running low. The parallel systems built during the sanctions years collapsed once the political will to maintain them evaporated. Sanctiongrad is financially dependent on the West again, exactly where it started, but poorer.'
       };
       return dealEpilogues[finalGrade] || dealEpilogues['C'];
     } else {
       const indepEpilogues = {
-        A: 'Against all odds, Sanctiongrad has built a functioning parallel economy. The frozen Western reserves are written off as a permanent loss, but the remaining portfolio generates enough liquidity and settlement capability to sustain essential trade. Consumer goods are available (mostly Chinese-made). President Volkov\'s approval ratings are stable. The economy isn\'t thriving, but it isn\'t collapsing — and after years of sanctions, survival on your own terms is its own kind of victory.',
+        A: 'Against all odds, Sanctiongrad has built a functioning parallel economy. The frozen Western reserves are written off as a permanent loss, but the remaining portfolio generates enough liquidity and settlement capability to sustain essential trade. Consumer goods are available (mostly Chinese-made). President Volkov\'s approval ratings are stable. The economy isn\'t thriving, but it isn\'t collapsing. After years of sanctions, survival on your own terms is its own kind of victory.',
         B: 'Sanctiongrad perseveres. The economy functions through a patchwork of bilateral agreements, gold-for-goods swaps, and BRICS payment rails. It\'s slower, more expensive, and less elegant than the Western system, but it works. Consumer electronics are scarce but available. President Volkov tells state media that "independence has a price worth paying." Whether citizens agree is a question no one is permitted to poll.',
         C: 'Sanctiongrad is surviving, barely. Essential imports flow but at significant markup. Technology access is limited to what China provides, and China drives a hard bargain. The parallel economy works for basics but cannot support modernization. Volkov\'s rhetoric remains defiant, but the Obsidian Palace corridors are quieter than they used to be.',
         D: 'Sanctiongrad\'s economy is visibly deteriorating. Consumer goods shortages are spreading. Young engineers emigrate to Central Asia and the Gulf. The frozen reserves feel less like a political grievance and more like a permanent loss. Volkov still appears on state television, but the speeches are shorter now.',
@@ -1032,7 +1032,7 @@ function getImpact() {
       return '<div class="impact-box crisis"><strong>Direct Impact</strong>The dollar crisis hits you hardest. You hold the world\'s largest Treasury stockpile, losing value daily. Every dollar of reserves is worth 8% less than last year. The Dragon Council demands answers.</div>';
     }
     if (ck === 'sanctiongrad') {
-      return '<div class="impact-box alert"><strong>Opportunity — or Trap?</strong>The dollar is falling. Western nations, scrambling for energy stability, are offering limited sanctions relief in exchange for energy concessions. President Volkov must choose: take the deal, or stay independent?</div>';
+      return '<div class="impact-box alert"><strong>Opportunity or Trap?</strong>The dollar is falling. Western nations, scrambling for energy stability, are offering limited sanctions relief in exchange for energy concessions. President Volkov must choose: take the deal, or stay independent?</div>';
     }
     return '<div class="impact-box alert"><strong>Dollar Crisis</strong>US sovereign debt has been downgraded. The dollar is falling sharply. If you\'re still holding heavy dollar positions, those reserves are actively shrinking.</div>';
   }
@@ -1175,7 +1175,7 @@ document.getElementById('btnLock').addEventListener('click', () => {
 // =====================================================================
 function renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlement, portRet) {
   const trapNarratives = {
-    'Fortress Dollar': 'Western nations impose targeted sanctions on Petrolistan in retaliation for the sovereignty tariff. 70% of your reserves are frozen overnight. Hospitals cannot import medicine. Oil infrastructure maintenance grinds to a halt without Western parts. The Supreme Economic Council convenes an emergency session. The Supreme Leader blames "foreign sabotage" but the reserve manager — you — is quietly replaced.',
+    'Fortress Dollar': 'Western nations impose targeted sanctions on Petrolistan in retaliation for the sovereignty tariff. 70% of your reserves are frozen overnight. Hospitals cannot import medicine. Oil infrastructure maintenance grinds to a halt without Western parts. The Supreme Economic Council convenes an emergency session. The Supreme Leader blames "foreign sabotage," but the reserve manager (you) is quietly replaced.',
     'Treasury Fortress': 'Washington announces secondary sanctions on any entity trading with Dragonia through dollar-denominated systems. Your massive Treasury position becomes a liability rather than an asset. Export orders cancel as trading partners fear sanctions contagion. The Dragon Council strips General Zhao of his position. You are reassigned to a provincial bank.',
     'Burn the Ships': 'The nationalization of Western assets triggers a cascade of counter-sanctions. Your remaining trade partners demand settlement in gold or yuan, but 40% of your reserves are in digital assets that nobody accepts for real trade. Consumer goods vanish from shelves within weeks. President Volkov declares a "temporary austerity program." It will not be temporary.',
     'Full Crypto': 'Bitcoin crashes 45% in a single week as regulatory crackdowns sweep across Asia. Your 65% digital position loses nearly a third of its value overnight. Petrolistan cannot pay for food imports. The Supreme Leader declares a state of economic emergency.',
@@ -1204,7 +1204,7 @@ function renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlemen
     <div class="reflection-input">
       <div class="r-label">Final Reflection</div>
       <label for="reflectionGameOver" class="sr-only">Final reflection on what went wrong</label>
-      <p class="r-question" id="goQuestion">What went wrong? Looking back at your strategy, where was the critical error — and what would you do differently?</p>
+      <p class="r-question" id="goQuestion">What went wrong? Looking back at your strategy, where was the critical error, and what would you do differently?</p>
       <textarea id="reflectionGameOver" aria-describedby="goQuestion" placeholder="Write your reflection here..."></textarea>
     </div>
     <div style="text-align:center;margin-top:20px;display:flex;gap:12px;justify-content:center">
@@ -1303,7 +1303,7 @@ function renderResults(alloc, score, grade, growth, liq, safety, settlement, por
   const refEl = document.getElementById('reflectionArea');
   refEl.innerHTML = `
     <div class="reflection-input">
-      <div class="r-label" id="refLabel${G.round}">Reflection — Round ${G.round+1}</div>
+      <div class="r-label" id="refLabel${G.round}">Reflection: Round ${G.round+1}</div>
       <p class="r-question" id="refQuestion${G.round}">${refQ}</p>
       <label for="reflectionInput${G.round}" class="sr-only">Your reflection for round ${G.round+1}</label>
       <textarea id="reflectionInput${G.round}" aria-describedby="refQuestion${G.round} refHint${G.round}" placeholder="Write your analysis here (2-3 sentences)..."></textarea>
@@ -1394,7 +1394,7 @@ function renderReport() {
   const epilogue = getEpilogue(G.countryKey, finalGrade, G.chosenStrategies);
   if (epilogue) {
     const epCls = finalScore >= 67 ? 'good' : finalScore >= 50 ? 'ok' : 'bad';
-    document.getElementById('reportEpilogue').innerHTML = `<div class="outcome-box ${epCls}" style="margin:16px 0"><div class="ob-label">${G.country.name} — 2030 and Beyond</div>${epilogue}</div>`;
+    document.getElementById('reportEpilogue').innerHTML = `<div class="outcome-box ${epCls}" style="margin:16px 0"><div class="ob-label">${G.country.name}: 2030 and Beyond</div>${epilogue}</div>`;
   }
 
   // Reflections log
@@ -1407,7 +1407,7 @@ function renderReport() {
     refHtml += '</div>';
     refEl.innerHTML = refHtml;
   } else {
-    refEl.innerHTML = '<div class="reflection-log"><h4>Your Reflections</h4><p style="color:var(--muted);font-size:14px;">No reflections recorded. Consider playing again and writing reflections each round — they\'ll form the basis of your discussion post.</p></div>';
+    refEl.innerHTML = '<div class="reflection-log"><h4>Your Reflections</h4><p style="color:var(--muted);font-size:14px;">No reflections recorded. Consider playing again and writing reflections each round. They\'ll form the basis of your discussion post.</p></div>';
   }
 
   // Result code
@@ -1429,7 +1429,7 @@ function renderReport() {
 // COPY BUTTONS
 // =====================================================================
 document.getElementById('btnCopyReport').addEventListener('click', () => {
-  let text = 'RESERVE CURRENCY WARGAME — SESSION REPORT\n\n';
+  let text = 'RESERVE CURRENCY WARGAME: SESSION REPORT\n\n';
   text += document.getElementById('reportSummary').innerText + '\n\n';
   text += 'ROUND-BY-ROUND:\n' + document.getElementById('reportRounds').innerText + '\n\n';
   if (_reflections.length > 0) {
@@ -1442,7 +1442,7 @@ document.getElementById('btnCopyReport').addEventListener('click', () => {
 });
 
 document.getElementById('btnCopyReflections').addEventListener('click', () => {
-  let text = `RESERVE CURRENCY WARGAME — REFLECTION LOG\nPlayer: ${G.playerName} | Country: ${G.country.name} | Final Grade: ${getGrade(G.scores[G.scores.length-1])}\n\n`;
+  let text = `RESERVE CURRENCY WARGAME: REFLECTION LOG\nPlayer: ${G.playerName} | Country: ${G.country.name} | Final Grade: ${getGrade(G.scores[G.scores.length-1])}\n\n`;
   _reflections.forEach(r => { text += `Round ${r.round} (${r.year}):\nQ: ${r.question}\nA: ${r.answer}\n\n`; });
   if (text) navigator.clipboard.writeText(text);
   showCopy(document.getElementById('btnCopyReflections'));
