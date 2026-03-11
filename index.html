@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserve Currency Wargame · FINAN VIII</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f4; --surface: #fff; --text: #1a1a1a; --muted: #6b7264;
+  --accent: #2d6a4f; --accent-bright: #40916c; --accent-light: #eef6f0;
+  --warm: #f5f0e6; --warm-dark: #e8dfd0; --border: #ddd6c8;
+  --info: #1d4e89; --info-light: #e8f0fb;
+  --warning: #b5651d; --warning-light: #fef3e2;
+  --negative: #c1121f; --negative-light: #fde8e8;
+  --panel: #1a2332; --panel-text: #e8edf3;
+  --west: #2563eb; --east: #dc2626; --gold-c: #ca8a04; --digital: #7c3aed;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.screen{display:none}.screen.active{display:block}
+.fade-in{animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Header */
+.site-header{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.site-header .label{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.site-header h1{font-family:'Fraunces',serif;font-size:30px;font-weight:700;line-height:1.2;margin-bottom:4px}
+.site-header .subtitle{font-size:14px;color:var(--muted);max-width:640px}
+
+/* Buttons */
+.btn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;padding:11px 24px;border:none;border-radius:8px;cursor:pointer;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-bright)}
+.btn-primary:disabled{background:var(--warm-dark);color:var(--muted);cursor:not-allowed;transform:none}
+.btn-secondary{background:var(--warm);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--warm-dark)}
+.btn-danger{background:var(--negative);color:#fff}
+.btn-danger:hover{background:#a00d18}
+
+/* Typography */
+h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.section-desc{color:var(--muted);margin-bottom:20px;font-size:14px;line-height:1.6}
+.phase-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+
+/* ===== LANDING ===== */
+.landing-hero{text-align:center;padding:40px 0 32px;max-width:600px;margin:0 auto}
+.landing-hero h2{font-family:'Fraunces',serif;font-size:26px;font-weight:700;margin-bottom:16px;line-height:1.3}
+.landing-hero p{color:var(--muted);margin-bottom:16px;font-size:15px;line-height:1.7}
+.landing-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0;text-align:left}
+.landing-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
+.landing-card h4{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.landing-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.name-section{margin:28px 0;text-align:center}
+.name-section label{font-size:15px;font-weight:600;display:block;margin-bottom:10px}
+.name-section input{font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 18px;border:2px solid var(--border);border-radius:8px;width:300px;max-width:100%;text-align:center;background:var(--surface)}
+.name-section input:focus{border-color:var(--accent);outline:none}
+
+/* ===== COUNTRY CARDS ===== */
+.country-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.country-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:22px 18px;cursor:pointer;text-align:left;transition:border-color .2s,box-shadow .2s,transform .1s}
+.country-card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(45,106,79,.1);transform:translateY(-2px)}
+.country-card .flag{font-size:28px;margin-bottom:8px;display:block}
+.country-card h3{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:6px}
+.country-card .flavor{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.country-card .tension{background:var(--accent-light);border-radius:6px;padding:9px 11px;font-size:12px;font-weight:500;color:var(--accent);line-height:1.4;margin-bottom:10px}
+.country-card .start-bar{margin-top:8px}
+
+/* Allocation bar (horizontal stacked) */
+.alloc-bar{display:flex;height:22px;border-radius:6px;overflow:hidden;background:var(--warm);margin:4px 0}
+.alloc-bar .seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;transition:width .4s ease;min-width:0}
+.alloc-bar .seg.w{background:var(--west)}.alloc-bar .seg.e{background:var(--east)}
+.alloc-bar .seg.g{background:var(--gold-c)}.alloc-bar .seg.d{background:var(--digital)}
+.alloc-bar .seg.frozen{background:#999;opacity:.6}
+.alloc-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:var(--muted)}
+.alloc-legend span{display:flex;align-items:center;gap:4px}
+.alloc-legend .dot{width:8px;height:8px;border-radius:2px;display:inline-block}
+
+/* ===== ROUND INDICATOR ===== */
+.round-dots{display:flex;gap:8px;margin-bottom:24px}
+.round-dot{flex:1;height:6px;border-radius:3px;background:var(--warm-dark);transition:background .3s}
+.round-dot.done{background:var(--accent)}.round-dot.now{background:var(--accent-bright);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ===== NEWS PANEL ===== */
+.news-panel{background:var(--panel);color:var(--panel-text);border-radius:12px;padding:28px;margin:20px 0}
+.news-panel .news-badge{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent-bright);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.news-panel .news-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent-bright)}
+.news-panel .headline{font-family:'Fraunces',serif;font-size:18px;font-weight:600;line-height:1.35;margin-bottom:14px;color:#fff}
+.news-panel .headline+.headline{padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}
+.news-panel .analyst{font-style:italic;font-size:13px;color:rgba(232,237,243,.7);margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1);line-height:1.6}
+.news-panel .leader-quote{background:rgba(255,255,255,.06);border-left:3px solid var(--accent-bright);padding:12px 16px;margin-top:16px;border-radius:0 8px 8px 0;font-size:14px;line-height:1.5;color:#e8edf3}
+.news-panel .leader-quote .speaker{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent-bright);margin-bottom:4px}
+
+/* ===== IMPACT BOX ===== */
+.impact-box{border-radius:10px;padding:16px 20px;margin:16px 0;font-size:14px;line-height:1.6}
+.impact-box.alert{background:var(--warning-light);color:var(--warning)}
+.impact-box.info{background:var(--info-light);color:var(--info)}
+.impact-box.crisis{background:var(--negative-light);color:var(--negative)}
+.impact-box strong{display:block;font-size:12px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+
+/* ===== STRATEGY CARDS ===== */
+.strategy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.strategy-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:20px 16px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .1s;position:relative}
+.strategy-card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(45,106,79,.08);transform:translateY(-1px)}
+.strategy-card.selected{border-color:var(--accent);background:var(--accent-light);box-shadow:0 4px 16px rgba(45,106,79,.12)}
+.strategy-card.trap{border-color:var(--negative);background:var(--negative-light)}
+.strategy-card h4{font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:6px}
+.strategy-card .tagline{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:12px;line-height:1.4}
+.strategy-card .pros-cons{font-size:12px;line-height:1.5}
+.strategy-card .pro,.strategy-card .con{padding:3px 0 3px 14px;position:relative}
+.strategy-card .pro::before{content:'+';position:absolute;left:0;color:var(--accent);font-weight:700}
+.strategy-card .con::before{content:'\2013';position:absolute;left:0;color:var(--negative);font-weight:700}
+
+/* ===== SCORE DISPLAY ===== */
+.score-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:20px 0;text-align:center}
+.score-big{font-family:'Fraunces',serif;font-size:64px;font-weight:800;line-height:1}
+.score-big.a{color:var(--accent)}.score-big.b{color:var(--info)}.score-big.c{color:var(--warning)}.score-big.d{color:var(--negative)}.score-big.f{color:var(--negative)}
+.score-number{font-size:18px;font-weight:600;color:var(--muted);margin-top:4px}
+.score-label{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.score-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;text-align:center}
+.score-breakdown .sb-item{font-size:12px}
+.score-breakdown .sb-val{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--text)}
+.score-breakdown .sb-label{color:var(--muted);margin-top:2px}
+
+/* ===== OUTCOME NARRATIVE ===== */
+.outcome-box{border-radius:10px;padding:18px 22px;margin:16px 0;font-size:14px;line-height:1.7}
+.outcome-box.good{background:var(--accent-light);color:#1a3a28}
+.outcome-box.ok{background:var(--warning-light);color:#5a3a0a}
+.outcome-box.bad{background:var(--negative-light);color:#5a1a1a}
+.outcome-box .ob-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+
+/* ===== REFLECTION INPUT ===== */
+.reflection-input{background:var(--info-light);border:1px solid #b8d4f0;border-radius:10px;padding:18px 22px;margin:16px 0}
+.reflection-input .r-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--info);margin-bottom:6px}
+.reflection-input .r-question{font-size:14px;line-height:1.6;margin-bottom:12px;font-weight:500}
+.reflection-input textarea{width:100%;min-height:80px;padding:12px;border:2px solid #b8d4f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;resize:vertical;background:#fff}
+.reflection-input textarea:focus{border-color:var(--info);outline:none}
+.reflection-input .r-hint{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* ===== REPORT ===== */
+.report-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:16px 0}
+.report-section h3{font-family:'Fraunces',serif;font-size:17px;font-weight:700;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;font-size:14px}
+.report-grid .rg-label{color:var(--muted)}.report-grid .rg-value{font-weight:600;text-align:right}
+.code-block{background:var(--panel);color:var(--panel-text);padding:14px;border-radius:8px;font-family:monospace;font-size:11px;word-break:break-all;max-height:100px;overflow-y:auto;margin:10px 0}
+.reflection-log{background:var(--info-light);border:1px solid #b8d4f0;border-radius:10px;padding:18px 22px;margin:16px 0}
+.reflection-log h4{font-family:'Fraunces',serif;font-size:15px;font-weight:600;color:var(--info);margin-bottom:12px}
+.reflection-log .log-entry{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #d4e4f4}
+.reflection-log .log-entry:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.reflection-log .log-q{font-size:13px;font-weight:600;color:var(--info);margin-bottom:4px}
+.reflection-log .log-a{font-size:14px;line-height:1.5}
+.copy-buttons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+
+.game-footer{text-align:center;padding:36px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:36px}
+
+/* Game over overlay for bad endings */
+.game-over{background:var(--negative-light);border:2px solid var(--negative);border-radius:12px;padding:28px;margin:20px 0;text-align:center}
+.game-over h3{font-family:'Fraunces',serif;font-size:22px;color:var(--negative);margin-bottom:12px}
+.game-over p{font-size:14px;line-height:1.7;margin-bottom:16px;color:#5a1a1a}
+
+@media(max-width:700px){
+  .country-grid,.strategy-grid{grid-template-columns:1fr}
+  .landing-grid{grid-template-columns:1fr}
+  .score-breakdown{grid-template-columns:repeat(2,1fr)}
+  .report-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="site-header">
+  <div class="label">FINAN VIII &middot; Unit 8</div>
+  <h1>Reserve Currency Wargame</h1>
+  <p class="subtitle">Navigate de-dollarization as a central bank reserve manager.</p>
+</header>
+
+<!-- ===== LANDING ===== -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-hero">
+    <h2>Your country's reserves pay for everything it imports &mdash; food, medicine, technology, energy.</h2>
+    <p>As reserve manager, you decide how to invest those reserves. Hold US dollars and you get stability &mdash; until America freezes your assets. Hold gold and nobody can touch it &mdash; but you can't pay for imports with gold bars. Hold digital assets and you're independent &mdash; but the price might crash 30% overnight.</p>
+    <p>Over four years of geopolitical upheaval, you'll choose a strategy each round. Your choices determine whether your country can keep the lights on.</p>
+  </div>
+  <div class="landing-grid">
+    <div class="landing-card">
+      <h4>Simple Choices, Real Tradeoffs</h4>
+      <p>Each round, pick one of three strategies. Each has clear pros and cons. No strategy is safe.</p>
+    </div>
+    <div class="landing-card">
+      <h4>Three Countries, Three Problems</h4>
+      <p>An oil exporter, a sanctioned economy, and the world's factory. Each faces a different version of the same question: how much can you trust the dollar?</p>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin:0 0 28px">
+    <h4 style="font-family:'Fraunces',serif;font-size:15px;font-weight:700;margin-bottom:12px">Your Stability Score (A through F) tracks four metrics:</h4>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px">
+      <div style="font-size:13px;line-height:1.5"><strong style="color:var(--accent)">Growth</strong> &mdash; Are your reserves growing or shrinking? High returns boost this score; bad bets tank it.</div>
+      <div style="font-size:13px;line-height:1.5"><strong style="color:var(--info)">Liquidity</strong> &mdash; Can you convert reserves to cash quickly? Dollars are instant; gold takes weeks to sell in volume.</div>
+      <div style="font-size:13px;line-height:1.5"><strong style="color:var(--warning)">Safety</strong> &mdash; What percentage of your reserves could a hostile government freeze? Western assets are sanctionable; gold and crypto are not.</div>
+      <div style="font-size:13px;line-height:1.5"><strong style="color:var(--negative)">Settlement</strong> &mdash; Can you actually pay your trade partners with what you hold? If China is 35% of your trade but you hold 0% yuan, you have a settlement gap.</div>
+    </div>
+  </div>
+  <div class="name-section">
+    <label for="playerName">Enter your name or student ID</label>
+    <input type="text" id="playerName" placeholder="e.g. Jane Smith" autocomplete="off">
+    <div style="margin-top:14px"><button class="btn btn-primary" id="btnStart">Choose Your Country &rarr;</button></div>
+  </div>
+</div>
+
+<!-- ===== COUNTRY SELECT ===== -->
+<div id="screen-countries" class="screen">
+  <h2 class="section-title">Choose Your Country</h2>
+  <p class="section-desc">Each country faces a fundamentally different version of the de-dollarization question. Your choice shapes every decision.</p>
+  <div class="country-grid" id="countryGrid"></div>
+</div>
+
+<!-- ===== ROUND PLAY ===== -->
+<div id="screen-round" class="screen">
+  <div class="round-dots" id="roundDots"></div>
+
+  <div id="phase-news" class="phase">
+    <div class="phase-label" id="phaseNewsLabel">Round 1 of 4</div>
+    <h2 class="section-title" id="roundTitle"></h2>
+    <div class="news-panel" id="newsPanel"></div>
+    <div id="impactBox"></div>
+    <div id="currentPosition"></div>
+    <div style="text-align:right;margin-top:16px">
+      <button class="btn btn-primary" id="btnToStrategy">Choose Your Strategy &rarr;</button>
+    </div>
+  </div>
+
+  <div id="phase-strategy" class="phase" style="display:none">
+    <div class="phase-label">Your Move</div>
+    <h2 class="section-title">Choose Your Strategy for <span id="strategyYear"></span></h2>
+    <p class="section-desc" id="strategyDesc">Select one of three approaches. Each reshapes your reserve portfolio with different tradeoffs.</p>
+    <div class="strategy-grid" id="strategyGrid"></div>
+    <div style="text-align:right;margin-top:16px">
+      <button class="btn btn-primary" id="btnLock" disabled>Lock In Strategy &rarr;</button>
+    </div>
+  </div>
+
+  <div id="phase-results" class="phase" style="display:none">
+    <div class="phase-label">Year-End Results</div>
+    <h2 class="section-title" id="resultsTitle"></h2>
+
+    <div class="score-panel" id="scorePanel">
+      <div class="score-label">Stability Score</div>
+      <div class="score-big" id="scoreBig">B</div>
+      <div class="score-number" id="scoreNumber">72 / 100</div>
+      <div class="score-breakdown" id="scoreBreakdown"></div>
+    </div>
+
+    <div id="actionNarrative"></div>
+    <div id="allocBarResult"></div>
+    <div id="outcomeNarrative"></div>
+    <div id="bulletinArea"></div>
+    <div id="reflectionArea"></div>
+
+    <div style="text-align:right;margin-top:16px">
+      <button class="btn btn-primary" id="btnNext">Continue to Next Round &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Game Over screen for catastrophic paths -->
+  <div id="phase-gameover" class="phase" style="display:none"></div>
+</div>
+
+<!-- ===== REPORT ===== -->
+<div id="screen-report" class="screen">
+  <h2 class="section-title">Session Report</h2>
+  <p class="section-desc">Your complete game record. Use this for your discussion post.</p>
+
+  <div class="score-panel" id="finalScorePanel"></div>
+
+  <div class="report-section">
+    <h3>Summary</h3>
+    <div class="report-grid" id="reportSummary"></div>
+  </div>
+
+  <div class="report-section">
+    <h3>Round-by-Round</h3>
+    <div id="reportRounds"></div>
+  </div>
+
+  <div id="reportEpilogue"></div>
+
+  <div id="reportReflections"></div>
+
+  <div class="report-section">
+    <h3>Result Code</h3>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Include this at the end of your discussion post.</p>
+    <div class="code-block" id="resultCode"></div>
+    <div class="copy-buttons">
+      <button class="btn btn-secondary" id="btnCopyReport">Copy Full Report</button>
+      <button class="btn btn-secondary" id="btnCopyReflections">Copy Reflections</button>
+      <button class="btn btn-primary" id="btnCopyCode">Copy Result Code</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px">
+    <button class="btn btn-secondary" id="btnPlayAgain">Play Again (Different Country)</button>
+  </div>
+</div>
+
+<footer class="game-footer">Reserve Currency Wargame &middot; FINAN VIII: Future of Finance</footer>
+</div>
+
+<script>
+// =====================================================================
+// PRNG (seeded for reproducibility)
+// =====================================================================
+function mulberry32(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashStr(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return Math.abs(h)}
+function normRand(rng,m,sd){const u1=rng(),u2=rng();return m+sd*Math.sqrt(-2*Math.log(u1||1e-10))*Math.cos(2*Math.PI*u2)}
+
+// =====================================================================
+// ASSET CLASS DATA
+// =====================================================================
+const CATS = ['w','e','g','d'];
+const CAT_NAMES = {w:'Western Reserves',e:'Eastern Currencies',g:'Gold',d:'Digital Assets'};
+const CAT_SHORT = {w:'Western',e:'Eastern',g:'Gold',d:'Digital'};
+const CAT_COLORS = {w:'var(--west)',e:'var(--east)',g:'var(--gold-c)',d:'var(--digital)'};
+const CAT_INFO = {
+  w:'US Treasuries and euro bonds. The most liquid assets on earth, universally accepted — but fully exposed to Western sanctions.',
+  e:'Chinese yuan and BRICS currencies. Growing in acceptance, especially with China and partner nations, but less liquid and subject to capital controls.',
+  g:'Physical gold in your vaults. Cannot be frozen or sanctioned by anyone. But earns no income and is slow to convert to cash.',
+  d:'Bitcoin and tokenized financial assets. No government can freeze them. High potential returns but extreme volatility and limited settlement acceptance today.'
+};
+const CAT_LIQ = {w:95,e:45,g:30,d:35};
+const CAT_SANCTIONS = {w:1.0,e:0.1,g:0,d:0};
+
+const RETURN_MEANS = [
+  {w:4.0,e:2.5,g:2.0,d:10.0},
+  {w:3.5,e:3.0,g:8.0,d:15.0},
+  {w:3.0,e:5.0,g:2.0,d:-5.0},
+  {w:-3.0,e:3.0,g:12.0,d:20.0}
+];
+const RETURN_SD = {w:2.5,e:4,g:7,d:18};
+const ROUND_YEARS = [2026,2027,2028,2029];
+const ROUND_NAMES = ['Baseline','Sanctions Escalation','BRICS Infrastructure','Dollar Stress'];
+
+// =====================================================================
+// NEWS — country-specific with leader quotes
+// =====================================================================
+function getNews(round, countryKey) {
+  const base = [
+    { h1:'Global Central Banks Hold Steady on Reserve Composition',
+      h2:'Tokenized Treasury Market Crosses $15 Billion',
+      analyst:'The status quo holds, but reserve managers are quietly reviewing their playbooks.' },
+    { h1:'Western Nations Freeze $300 Billion in Foreign Reserves Overnight',
+      h2:'Gold Prices Surge as Central Banks Accelerate Emergency Purchases',
+      analyst:'Every reserve manager on earth just learned the same lesson: dollar assets can be turned into weapons.' },
+    { h1:'BRICS Bridge Payment System Goes Live — First Commodity Trades Settled Outside Dollar System',
+      h2:'China Devalues Yuan 4% to Boost Exports, Rattling Partner Nations',
+      analyst:'Alternative settlement infrastructure is real now. But the yuan devaluation reminds everyone that non-dollar alternatives carry their own risks.' },
+    { h1:'US Debt-to-GDP Hits 140% — Major Rating Agency Downgrades US Sovereign Credit',
+      h2:'Dollar Falls 8% Against Major Currencies in Worst Month Since 2008',
+      analyst:'The dollar\'s safe-haven status faces its first serious test in decades. Every reserve portfolio with heavy dollar exposure is underwater.' }
+  ];
+
+  // Country-specific leader quotes and extra headlines
+  const leaderQuotes = {
+    petrolistan: [
+      { speaker:'Supreme Leader Khalid al-Rashid, Petrolistan',
+        quote:'Our oil has made nations wealthy. Our oil has fueled empires. And yet every barrel we sell enriches a currency we do not control. This is not sovereignty — this is servitude with a premium.' },
+      { speaker:'Supreme Leader Khalid al-Rashid, address to the National Oil Council',
+        quote:'They froze $300 billion overnight. Let me be clear: any nation that stores its wealth in another country\'s vault is not a nation. It is a tenant.' },
+      { speaker:'Deputy Finance Minister Fatima al-Harbi, Petrolistan Economic Summit',
+        quote:'BRICS Bridge means we can sell oil to Shanghai and settle in yuan within hours. Three years ago that took twelve days through correspondent banks in New York.' },
+      { speaker:'Supreme Leader Khalid al-Rashid, emergency economic address',
+        quote:'The Americans printed too much money and now the world pays the price. Petrolistan\'s reserves will not be held hostage to the fiscal discipline of another nation.' }
+    ],
+    sanctiongrad: [
+      { speaker:'President Viktor Volkov, Sanctiongrad State Television',
+        quote:'The West calls our economy isolated. I call it liberated. When they froze our reserves, they freed us from the illusion that their system was ever truly ours.' },
+      { speaker:'President Viktor Volkov, emergency address from the Obsidian Palace',
+        quote:'They have frozen another nation\'s reserves. Do you see now? What happened to us was not punishment — it was a preview. Every nation that defies them will face the same weapon.' },
+      { speaker:'General Secretary of the Sanctiongrad Central Bank, internal briefing (leaked)',
+        quote:'BRICS Bridge processed our first commodity settlement today. It is slower, more expensive, and less elegant than SWIFT. But it is ours, and no American official can turn it off with a phone call.' },
+      { speaker:'President Viktor Volkov, Victory Day address',
+        quote:'They said the dollar was the only safe asset. Today the dollar falls and gold rises. History vindicates the patient.' }
+    ],
+    dragonia: [
+      { speaker:'General Zhao Wei, Dragonia Strategic Reserve Council',
+        quote:'We hold $800 billion in American Treasury bonds. If we sell too quickly, we crash the very market our exports depend on. If we hold too long, we watch our wealth evaporate. This is the paradox of the creditor.' },
+      { speaker:'Premier Li, closed-door Politburo session (leaked transcript)',
+        quote:'The sanctions on that exporter were a message. Not to them — to us. The Americans are saying: we can do this to anyone. We must ensure they cannot do it to Dragonia.' },
+      { speaker:'General Zhao Wei, BRICS Summit keynote',
+        quote:'Dragonia did not build BRICS Bridge to destroy the dollar. We built it because no nation should depend on a single payment system it does not control. Redundancy is sovereignty.' },
+      { speaker:'Premier Li, address to the National People\'s Assembly',
+        quote:'The American downgrade is not our victory. A weaker dollar means weaker demand for Dragonian exports. But it proves what we have argued for a decade: reserve diversification is not rebellion. It is prudence.' }
+    ]
+  };
+
+  // Country-specific extra headlines for R2
+  const r2Extra = {
+    petrolistan: 'Petrolistan Oil Minister Floats Yuan-Denominated Oil Contracts at OPEC Meeting',
+    sanctiongrad: 'Sanctiongrad Central Bank Reports 94% of Trade Now Settled Outside Western Systems',
+    dragonia: 'Dragonia Quietly Sells $50B in US Treasuries — Largest Monthly Disposal on Record'
+  };
+
+  const news = {...base[round]};
+  // Add country-specific second headline for R2
+  if (round === 1 && r2Extra[countryKey]) {
+    news.h2 = r2Extra[countryKey];
+  }
+
+  const lq = leaderQuotes[countryKey]?.[round];
+  if (lq) {
+    news.leaderQuote = lq;
+  }
+
+  return news;
+}
+
+// =====================================================================
+// REFLECTION QUESTIONS — country-specific
+// =====================================================================
+function getReflection(round, countryKey) {
+  const questions = {
+    petrolistan: [
+      'Petrolistan earns 70% of its revenue in dollars. Look at your allocation: what percentage of your reserves is still dollar-denominated? If the US imposed secondary sanctions on oil buyers who pay Petrolistan in non-dollar currencies, how would your current position hold up?',
+      'Supreme Leader Khalid just publicly compared dollar dependence to "servitude." But your country still prices oil in dollars. Is his rhetoric ahead of your reserve strategy, behind it, or aligned with it? What are the risks of the gap between political rhetoric and financial reality?',
+      'BRICS Bridge is live and your biggest trade partner is China at 35% of trade. How much of your reserves can actually settle transactions with China right now? Is that enough, or are you still routing payments through New York?',
+      'The dollar just dropped 8%. Look at your final portfolio. If oil prices also fell 20% next year (reducing your total revenue), could your reserves cover 12 months of imports? Which asset class would you liquidate first, and how quickly could you convert it to usable payment?'
+    ],
+    sanctiongrad: [
+      'Twenty percent of your reserves are frozen and inaccessible. Of your remaining reserves, what percentage is in assets that no government can seize? Is that enough to sustain trade, or are you trading security for functionality?',
+      'New sanctions just froze another country\'s reserves. You\'ve been living under sanctions already. Has your experience under sanctions prepared you for this moment, or has it just shifted your vulnerability from Western sanctions to Chinese dependence?',
+      'BRICS Bridge is live. For Sanctiongrad, this isn\'t an opportunity — it\'s a lifeline. But China controls significant parts of this infrastructure. How is depending on BRICS Bridge different from depending on SWIFT? Is it different?',
+      'President Volkov is celebrating the dollar\'s decline on state television. But your people face consumer goods shortages and your semiconductor imports have stopped. Is "winning" the de-dollarization argument worth the economic cost? At what point does financial independence become economic isolation?'
+    ],
+    dragonia: [
+      'Dragonia holds the world\'s largest Treasury stockpile. If you started selling aggressively, Treasury prices would fall — destroying the value of your remaining holdings. How does this "dollar trap" constrain your options in ways other countries don\'t face?',
+      'The Dragon Council is debating whether the sanctions on that commodity exporter were a warning aimed at Dragonia. General Zhao thinks yes. The Trade Minister thinks the US would never sanction its largest trading partner. Who do you agree with, and how should that belief shape your reserve strategy?',
+      'You helped build BRICS Bridge. Now it\'s live. But China just devalued the yuan 4%, hurting every country that held yuan reserves on your recommendation. How does this devaluation affect Dragonia\'s credibility as a leader of the alternative financial system?',
+      'The dollar is falling. Dragonia\'s remaining Treasury holdings are losing value daily. But a weaker dollar also means weaker American demand for Dragonian exports. You\'re caught between two losses. Which one hurts more, and what does that tell you about the real purpose of reserves — investment returns or trade facilitation?'
+    ]
+  };
+  return questions[countryKey]?.[round] || '';
+}
+
+// =====================================================================
+// COUNTRIES — with narrative characters and caused events
+// =====================================================================
+const COUNTRIES = {
+  petrolistan: {
+    name:'Petrolistan', flag:'\u{1F3ED}',
+    flavor:'An ancient civilization built on oil. Your petroleum revenues fund everything — hospitals, roads, universities. But every barrel is priced in US dollars, tying your prosperity to a currency controlled by a rival power.',
+    tension:'Your oil is priced in dollars. Your independence demands alternatives. Every barrel sold tightens the knot.',
+    leader:'Supreme Leader Khalid al-Rashid',
+    startAlloc:{w:65,e:10,g:15,d:10},
+    trade:{us:.20,eu:.25,china:.35,other:.20},
+    tradeLabels:['US 20%','EU 25%','China 35%','Other 20%'],
+    frozen:{},
+    outcomes:{
+      good:'Oil revenues are flowing and all import channels are open. Hospitals are stocked, infrastructure projects on schedule. The Supreme Economic Council commends your stewardship.',
+      ok:'Oil revenues continue, but pharmaceutical imports from Europe are slow and technology transfers from Western nations are getting complicated. Workarounds exist but cost money.',
+      bad:'Import channels are breaking down. Medicine shortages reported in three provinces. Technology imports for your oil infrastructure are delayed — the very equipment that keeps the revenue flowing. The Economic Council demands answers.'
+    },
+    // R2 provocation: Petrolistan's leader provokes sanctions
+    r2Provocation:'Supreme Leader Khalid announces that Petrolistan will impose a 15% "sovereignty tariff" on all ships transiting the Strait of Rashid, payable only in gold or yuan. Western nations call it piracy. Oil prices spike 12%.',
+    strategies:[
+      // R1 — baseline
+      [{name:'Dollar Anchor',tag:'The dollar pays our bills. Don\'t fix what isn\'t broken.',alloc:{w:65,e:10,g:15,d:10},pros:['Maximum liquidity — reserves instantly mobilizable','Strong yield from US Treasury bonds'],cons:['65% of reserves vulnerable to sanctions','Fully dependent on Western financial system']},
+       {name:'Cautious Diversifier',tag:'Reduce dependence before we\'re forced to.',alloc:{w:45,e:25,g:20,d:10},pros:['Builds settlement with China, your biggest trade partner','Cuts sanctions exposure nearly in half'],cons:['Rebalancing cost from selling Western assets','Eastern currencies are less liquid in a crisis']},
+       {name:'Bold Modernizer',tag:'Digital assets can\'t be sanctioned. Position while others hesitate.',alloc:{w:40,e:15,g:20,d:25},pros:['No government can freeze bitcoin or tokenized assets','If digital settlement takes off, you\'re years ahead'],cons:['Digital assets could lose 20-30% in a single year','Very few trade partners accept digital payment today']}],
+      // R2 — sanctions hit (Khalid provoked them)
+      [{name:'Steady Hand',tag:'Stay calm. The tariff revenue is worth the diplomatic noise.',alloc:{w:50,e:20,g:20,d:10},pros:['Maintains strong liquidity position','Signals stability to credit markets'],cons:['Western nations are furious — sanctions risk is real','Over half still exposed if they retaliate']},
+       {name:'Swift Pivot',tag:'We poked the bear. Now move our money before they freeze it.',alloc:{w:25,e:35,g:25,d:15},pros:['Dramatic sanctions reduction — only 25% exposed','Builds deep China/BRICS settlement'],cons:['Major rebalancing cost from selling at speed','Heavy dependence on Chinese financial system']},
+       {name:'Fortress Dollar',tag:'Double down. The West won\'t sanction the world\'s oil supply. They need us.',alloc:{w:70,e:5,g:15,d:10},isTrap:true,pros:['If you\'re right, maximum returns and liquidity','Shows confidence in the relationship'],cons:['If you\'re wrong, 70% of reserves could be frozen','You just imposed a tariff that enraged Western capitals']}],
+      // R3
+      [{name:'Watch and Wait',tag:'BRICS is promising. Let others test it first.',alloc:{w:40,e:25,g:20,d:15},pros:['Balanced position — no extreme exposure','Lower rebalancing cost than aggressive shifts'],cons:['Not positioned to benefit from BRICS Bridge','Still 40% exposed to Western sanctions risk']},
+       {name:'Full BRICS',tag:'Our biggest trade partner is China. Match reserves to reality.',alloc:{w:20,e:40,g:20,d:20},pros:['Excellent settlement with China (35% of your trade)','Very low sanctions exposure'],cons:['If China devalues again, 40% of reserves lose value','Low Western liquidity if you need dollars fast']},
+       {name:'Digital Bridge',tag:'Tokenized settlement could bypass both dollar and yuan.',alloc:{w:25,e:20,g:20,d:35},pros:['Independent of both Western and Chinese systems','Digital settlement is growing rapidly'],cons:['Highest volatility of any strategy','Unproven at the scale of national reserves']}],
+      // R4
+      [{name:'Ride It Out',tag:'Dollar crises come and go. Don\'t sell at the bottom.',alloc:{w:30,e:25,g:30,d:15},pros:['Avoids panic selling at worst prices','Gold hedge protects against dollar decline'],cons:['Dollar is actively falling — every day costs money','If this is structural, not cyclical, you\'re caught']},
+       {name:'Emergency Exit',tag:'The dollar era is ending. Get out while you still can.',alloc:{w:10,e:35,g:35,d:20},pros:['Minimal dollar exposure during the crisis','Heavy gold position thrives in uncertainty'],cons:['Massive rebalancing cost — selling at the bottom','Almost no Western liquidity if you need dollars']},
+       {name:'Full Crypto',tag:'Bitcoin is up 30%. Go all in on the future.',alloc:{w:10,e:10,g:15,d:65},isTrap:true,pros:['Digital assets are surging during the crisis','Maximum independence from all sovereign currencies'],cons:['65% in assets that could crash 40% overnight','Almost zero trade partners accept digital settlement']}]
+    ]
+  },
+  sanctiongrad: {
+    name:'Sanctiongrad', flag:'\u{1F3D8}\uFE0F',
+    flavor:'A resource empire under siege. When Western nations froze 20% of your reserves overnight, it was a lesson in what "safe assets" really means. Now you manage what\'s left — constrained, creative, and fighting for survival.',
+    tension:'20% of your reserves are frozen. You cannot touch your Western holdings. Every alternative has a cost.',
+    leader:'President Viktor Volkov',
+    startAlloc:{w:20,e:25,g:40,d:15},
+    trade:{china:.45,india:.15,friendly:.30,western:.10},
+    tradeLabels:['China 45%','India 15%','Friendly Nations 30%','Western 10%'],
+    frozen:{w:true},
+    outcomes:{
+      good:'Trade through friendly nations and China is functioning reliably. Your workarounds are holding. Consumer goods are available, energy exports flowing.',
+      ok:'Settlement is functional but slow. Some commodity trades require triple-currency intermediation through Central Asian banks. Consumer electronics are scarce. Prices are rising.',
+      bad:'Only gold-for-goods barter with immediate neighbors is working reliably. Semiconductor imports have stopped. Essential consumer goods disappearing from stores. Bread lines forming in smaller cities.'
+    },
+    r2Provocation:'President Volkov announces Sanctiongrad will nationalize all remaining Western corporate assets and redirect energy exports exclusively to "friendly nations." Western media calls it economic warfare.',
+    strategies:[
+      // R1
+      [{name:'Gold Standard',tag:'Gold is the one asset nobody can take from us.',alloc:{w:20,e:20,g:45,d:15},pros:['Maximizes the asset no sanctions can touch','Gold is liquid enough for slow but steady trade'],cons:['Gold earns nothing — your reserves don\'t grow','Difficult to pay for time-sensitive imports']},
+       {name:'Eastern Alliance',tag:'China is our lifeline. Invest in that relationship.',alloc:{w:20,e:40,g:25,d:15},pros:['Strong settlement with China (45% of your trade)','Yuan reserves are growing in acceptance globally'],cons:['Extreme dependence on a single partner','If China\'s interests diverge, you\'re exposed']},
+       {name:'Digital Sovereignty',tag:'If the old system locked us out, we\'ll build a new one.',alloc:{w:20,e:20,g:30,d:30},pros:['Blockchain assets exist outside all sanctions regimes','Positions for tokenized settlement future'],cons:['Extreme volatility — reserves could swing wildly','Almost nobody accepts digital payment for commodities']}],
+      // R2
+      [{name:'Double Down Gold',tag:'The world just proved gold\'s value again. Stack more.',alloc:{w:20,e:20,g:50,d:10},pros:['50% in the ultimate sanctions-proof asset','Gold is surging globally right now'],cons:['Half your reserves earn zero yield','Very limited settlement utility']},
+       {name:'Deepen China Ties',tag:'China is the only major economy trading with us freely.',alloc:{w:20,e:45,g:20,d:15},pros:['Excellent settlement with dominant trade partner','Benefits from BRICS system development'],cons:['If China pressures you politically, no leverage','Yuan capital controls could trap your reserves']},
+       {name:'Burn the Ships',tag:'Nationalize everything Western. Go fully independent.',alloc:{w:20,e:15,g:25,d:40},isTrap:true,pros:['Maximum ideological commitment to independence','If crypto soars, you\'re rich on paper'],cons:['40% in assets with no settlement utility','Your people can\'t eat bitcoin']}],
+      // R3
+      [{name:'Measured Integration',tag:'Join BRICS Bridge, but keep options open.',alloc:{w:20,e:30,g:30,d:20},pros:['Balanced non-Western portfolio','Benefits from improved Eastern liquidity'],cons:['Not fully committed to any single system','Gold position limits growth potential']},
+       {name:'All In BRICS',tag:'The new system is live. Go all in.',alloc:{w:20,e:50,g:15,d:15},pros:['Maximum settlement with BRICS partners','Eastern liquidity just improved dramatically'],cons:['50% in currencies with capital controls','If BRICS Bridge has problems, you\'re overexposed']},
+       {name:'Tech Leapfrog',tag:'Skip traditional banking entirely. Go digital.',alloc:{w:20,e:20,g:20,d:40},pros:['Maximum independence from ALL traditional systems','Digital settlement is growing rapidly'],cons:['Extreme volatility risk with 40% digital','Most trade partners still prefer traditional settlement']}],
+      // R4
+      [{name:'Accept the Deal',tag:'Accept sanctions relief. Regain Western access.',alloc:{w:30,e:25,g:30,d:15},unfreezes:true,pros:['Western reserves UNFREEZE — 30% is now accessible','Dramatically improves liquidity and settlement'],cons:['You owe energy concessions to Europe','Back under Western financial influence']},
+       {name:'Stay Independent',tag:'We survived without them. Keep building alternatives.',alloc:{w:20,e:35,g:30,d:15},pros:['Maintains complete independence','No political concessions required'],cons:['Frozen reserves stay frozen — that money is gone','Limited Western technology imports continue']},
+       {name:'Victory Lap',tag:'The dollar is collapsing. Bet everything on the new order.',alloc:{w:20,e:20,g:15,d:45},isTrap:true,pros:['Dollar crisis "validates" your worldview','Digital assets surging in the chaos'],cons:['45% in assets your people can\'t spend','Celebrating while bread lines form is... a choice']}]
+    ]
+  },
+  dragonia: {
+    name:'Dragonia', flag:'\u{1F409}',
+    flavor:'The world\'s factory. Your ports ship goods to every continent, and your reserves are the largest on earth. But $800 billion in US Treasuries is both a safety net and a trap — sell too fast and you crash the very markets your exporters depend on.',
+    tension:'You hold $800B in Treasuries. Selling them crashes the markets your own exports depend on. Diversify without breaking the system.',
+    leader:'General Zhao Wei, Strategic Reserve Council',
+    startAlloc:{w:60,e:10,g:15,d:15},
+    trade:{us:.20,eu:.25,asean:.20,other:.35},
+    tradeLabels:['US 20%','EU 25%','ASEAN 20%','Other 35%'],
+    frozen:{},
+    outcomes:{
+      good:'Manufacturing supply chains running smoothly across all partner regions. Exports growing, imports flowing, currency stable. The Dragon Council is satisfied.',
+      ok:'Supply chains are mostly stable, but some raw material imports require yuan renegotiation. Energy imports from the Middle East requesting alternative settlement. Minor delays, manageable costs.',
+      bad:'Export supply chains disrupted. You can\'t pay for the semiconductor components and energy your factories need. Manufacturing output falling. Unemployment rising in industrial provinces. The Dragon Council demands an emergency session.'
+    },
+    r2Provocation:'General Zhao publishes a white paper arguing Dragonia should "prepare for financial decoupling" from the West. Leaked Pentagon analysis calls it "a declaration of economic cold war."',
+    strategies:[
+      // R1
+      [{name:'Gradual Transition',tag:'Slow and steady. Don\'t spook the markets that buy our goods.',alloc:{w:55,e:15,g:15,d:15},pros:['Minimal disruption to existing trade','Strong liquidity maintained'],cons:['Still 55% exposed to potential sanctions','Slow to build alternative settlement']},
+       {name:'Strategic Rebalance',tag:'Build Eastern infrastructure while we still have time.',alloc:{w:40,e:25,g:20,d:15},pros:['Meaningful increase in BRICS settlement','Better balance across all four asset types'],cons:['Selling $160B in Treasuries may move markets','Rebalancing cost from large portfolio shift']},
+       {name:'Digital Infrastructure',tag:'The future of cross-border settlement is tokenized.',alloc:{w:40,e:15,g:15,d:30},pros:['Positions for digital yuan and tokenized settlement','Technology leadership in reserve management'],cons:['Digital assets are extremely volatile','30% in assets most partners don\'t accept yet']}],
+      // R2
+      [{name:'Diplomatic Balance',tag:'Stay neutral. Hedge with gold. Don\'t take sides.',alloc:{w:45,e:20,g:25,d:10},pros:['Maintains relationships with both blocs','Gold hedge against geopolitical uncertainty'],cons:['Still heavily exposed to dollar sanctions risk','Not building settlement with Eastern partners']},
+       {name:'Accelerate East',tag:'Sanctions prove dollars are weapons. Speed up the transition.',alloc:{w:30,e:35,g:20,d:15},pros:['Strong pivot toward trading partner settlement','Significantly reduced sanctions exposure'],cons:['Selling Treasuries in uncertain market','Growing dependence on yuan with capital controls']},
+       {name:'Treasury Fortress',tag:'We\'re too big to sanction. Buy MORE Treasuries at discount.',alloc:{w:65,e:10,g:15,d:10},isTrap:true,pros:['Treasuries are cheaper after the panic — buy low','Signals confidence in US-Dragonia relationship'],cons:['65% in the asset class that just got weaponized','If you\'re wrong about being "too big to sanction"...']}],
+      // R3
+      [{name:'Patient Builder',tag:'BRICS is live. Shift steadily as infrastructure matures.',alloc:{w:35,e:30,g:20,d:15},pros:['Positioned to benefit from BRICS Bridge','Balanced and diversified portfolio'],cons:['Still significant Western exposure','Not fully committed to system you helped build']},
+       {name:'BRICS Architect',tag:'We built this system. Time to use it.',alloc:{w:20,e:40,g:15,d:25},pros:['Maximum benefit from BRICS Bridge launch','Strong settlement with ASEAN and Other partners'],cons:['Only 20% Western — limited dollar liquidity','If BRICS has growing pains, heavily exposed']},
+       {name:'Digital Yuan Push',tag:'Make the digital yuan the world\'s settlement standard.',alloc:{w:25,e:20,g:15,d:40},pros:['Digital infrastructure + yuan internationalization','Leadership in next-generation settlement'],cons:['40% in highly volatile digital assets','Enormous risk if tokenized markets stumble']}],
+      // R4
+      [{name:'Managed Retreat',tag:'Sell Treasuries in an orderly fashion. Don\'t cause a panic.',alloc:{w:25,e:30,g:30,d:15},pros:['Orderly reduction minimizes market impact','Strong gold and Eastern position for crisis'],cons:['Still holding depreciating dollars','Slow approach means taking losses daily']},
+       {name:'Treasury Dump',tag:'The dollar is falling. Sell before it falls further.',alloc:{w:10,e:35,g:35,d:20},pros:['Minimal dollar exposure during crisis','Gold and Eastern reserves thriving'],cons:['Dumping Treasuries crashes their price','Severely strains US relationship']},
+       {name:'Digital Supremacy',tag:'Bitcoin is surging. Go all in on the new financial order.',alloc:{w:10,e:15,g:15,d:60},isTrap:true,pros:['Digital assets soaring during dollar crisis','Maximum independence from all sovereigns'],cons:['60% in assets that could halve overnight','Your factories need stable payment, not speculation']}]
+    ]
+  }
+};
+
+// =====================================================================
+// GAME STATE
+// =====================================================================
+let G = {};
+let _reflections = [];
+
+function initGame(countryKey, playerName) {
+  const c = COUNTRIES[countryKey];
+  const seed = hashStr(playerName + countryKey);
+  G = {
+    playerName, countryKey, country: c,
+    round: 0,
+    rng: mulberry32(seed),
+    seed,
+    allocations: [],
+    chosenStrategies: [],
+    portfolioReturns: [],
+    cumulativeReturn: 1.0,
+    scores: [],
+    scoreComponents: [],
+    hitTrap: false,
+    trapRound: -1,
+    sanctionsApplied: false
+  };
+  _reflections = [];
+}
+
+// =====================================================================
+// SCORING — rebalanced for wider spread
+// =====================================================================
+function computeSettlement(alloc, countryKey) {
+  const c = COUNTRIES[countryKey];
+  const trade = c.trade;
+  let total = 0;
+  Object.keys(trade).forEach(p => {
+    const ps = trade[p];
+    let ar = 0;
+    if (p==='us') ar = alloc.w/100;
+    else if (p==='eu') ar = alloc.w/100;
+    else if (p==='china') { ar = alloc.e/100 + (alloc.g/100)*.5 + (alloc.d/100)*.3; }
+    else if (p==='asean') { ar = (alloc.w/100)*.3 + alloc.e/100 + (alloc.g/100)*.3 + (alloc.d/100)*.2; }
+    else if (p==='india') { ar = alloc.e/100 + (alloc.g/100)*.5 + (alloc.d/100)*.2; }
+    else if (p==='friendly') { ar = alloc.e/100 + (alloc.g/100)*.5 + (alloc.d/100)*.4; }
+    else if (p==='western') { ar = alloc.w/100; }
+    else if (p==='other') { ar = (alloc.w/100)*.4 + alloc.e/100 + (alloc.g/100)*.3 + (alloc.d/100)*.2; }
+    total += Math.min(ar, ps);
+  });
+  return Math.round(total * 100);
+}
+
+function computeLiquidity(alloc, round) {
+  let liq = {...CAT_LIQ};
+  if (round >= 2) liq.e = 65;
+  let s = 0;
+  CATS.forEach(c => s += (alloc[c]/100) * liq[c]);
+  return Math.round(s);
+}
+
+function computeSafety(alloc) {
+  let exp = 0;
+  CATS.forEach(c => exp += (alloc[c]/100) * CAT_SANCTIONS[c]);
+  return Math.round((1 - exp) * 100);
+}
+
+// Settlement crisis penalty: if settlement drops below 40, massive penalty
+function computeScore(growth, liquidity, safety, settlement) {
+  // Weight settlement and safety more heavily — they're the real game
+  let base = Math.round(growth * 0.2 + liquidity * 0.2 + safety * 0.3 + settlement * 0.3);
+  // Settlement crisis: can't pay for imports = catastrophic
+  if (settlement < 25) base = Math.round(base * 0.5);
+  else if (settlement < 35) base = Math.round(base * 0.7);
+  else if (settlement < 45) base = Math.round(base * 0.85);
+  // Liquidity crisis
+  if (liquidity < 30) base = Math.round(base * 0.75);
+  // Safety crisis — extreme sanctions exposure
+  if (safety < 30) base = Math.round(base * 0.8);
+  return Math.min(100, Math.max(0, base));
+}
+
+function getGrade(score) {
+  if (score >= 82) return 'A';
+  if (score >= 67) return 'B';
+  if (score >= 50) return 'C';
+  if (score >= 30) return 'D';
+  return 'F';
+}
+
+function getGradeClass(grade) { return grade.toLowerCase(); }
+
+function growthToScore(cumReturn) {
+  // More responsive: amplify returns impact
+  return Math.max(0, Math.min(100, Math.round(50 + cumReturn * 3.5)));
+}
+
+// Country-specific metric bulletins
+function getMetricBulletin(metric, value, countryKey) {
+  const bulletins = {
+    petrolistan: {
+      settlement_low: 'Petrolistan\'s Health Ministry reports critical insulin shortages after payments to European pharmaceutical suppliers failed to clear. Makeshift barter arrangements through Omani intermediaries cover only 40% of demand.',
+      settlement_high: 'Petrolistan\'s oil-for-goods pipelines are humming. Chinese manufacturers accept yuan settlement for heavy machinery; European pharmaceutical imports clearing smoothly through diversified channels.',
+      safety_low: 'Western intelligence officials confirm Petrolistan is "one presidential directive away" from a full asset freeze. Diplomats describe the sovereign tariff as "an act of economic aggression."',
+      safety_high: 'Petrolistan\'s reserves are largely beyond Western reach. Financial analysts note the country has quietly become "sanctions-proof" without making headlines.',
+      liquidity_low: 'Petrolistan\'s reserve manager struggles to liquidate gold holdings fast enough to cover an emergency oil infrastructure repair. A critical desalination plant waits three weeks for parts.',
+      liquidity_high: 'Petrolistan deploys reserves within hours to secure emergency grain shipments after a regional drought. High liquidity means fast response.',
+      growth_low: 'Petrolistan\'s sovereign wealth fund reports its worst quarterly return in a decade. Opposition newspapers — published abroad — call it "the price of ideology over arithmetic."',
+      growth_high: 'Petrolistan\'s reserves are outperforming regional peers. The Economic Council approves a new university campus funded entirely from reserve returns.'
+    },
+    sanctiongrad: {
+      settlement_low: 'Sanctiongrad grocery stores report empty shelves in consumer electronics and imported food aisles. A viral video shows citizens queuing for hours for basic appliances. State media blames "Western economic terrorism."',
+      settlement_high: 'Sanctiongrad\'s parallel trade networks are functioning. Chinese consumer goods fill store shelves; Indian pharmaceutical imports arrive via a new bilateral settlement corridor.',
+      safety_low: 'Leaked Sanctiongrad Central Bank memo warns that if additional Western allies join the sanctions regime, remaining unfrozen reserves could face secondary sanctions exposure.',
+      safety_high: 'An opposition newspaper (published in exile) grudgingly admits: "Whatever else you say about Volkov, the reserves are untouchable."',
+      liquidity_low: 'Sanctiongrad attempts to sell gold reserves to cover an emergency wheat purchase. The transaction takes 19 days through intermediaries. Bread rationing begins in eastern provinces.',
+      liquidity_high: 'Sanctiongrad\'s Eastern currency reserves allow rapid settlement of emergency energy equipment imports from China. The new BRICS channels process the order in 48 hours.',
+      growth_low: 'Sanctiongrad\'s reserves are shrinking in real terms. Inflation at 14% means the actual purchasing power of the central bank is declining quarter over quarter.',
+      growth_high: 'Despite sanctions, Sanctiongrad\'s remaining reserves have grown. Gold appreciation and Eastern currency gains offset frozen Western losses.'
+    },
+    dragonia: {
+      settlement_low: 'Dragonia\'s export factories idle as raw material suppliers in Southeast Asia refuse settlement in digital assets. "We need real currency," says a Thai steel executive. Unemployment in Guangdong province ticks up.',
+      settlement_high: 'Dragonia settles its largest-ever commodity purchase with Brazil entirely through BRICS Bridge. No dollars involved. Trade Ministry officials call it "proof of concept at scale."',
+      safety_low: 'Pentagon analysts brief Congress: "Dragonia\'s heavy dollar exposure gives us significant financial leverage." Dragonian intelligence intercepts the briefing. The Dragon Council is not pleased.',
+      safety_high: 'A leaked CIA assessment concludes that financial sanctions on Dragonia would be "ineffective given current reserve composition." The Dragon Council quietly celebrates.',
+      liquidity_low: 'Dragonia\'s reserve manager cannot sell gold fast enough to cover a spike in LNG prices. For three days, factories in Fujian province reduce output by 20% waiting for payment to clear.',
+      liquidity_high: 'A sudden earthquake requires $15B in emergency imports. Dragonia\'s highly liquid reserves deploy within hours. General Zhao notes: "This is what reserves are for."',
+      growth_low: 'Dragonia\'s reserves lose purchasing power for the second consecutive quarter. Opposition economists (writing under pseudonyms) question General Zhao\'s strategy.',
+      growth_high: 'Dragonia\'s reserves hit an all-time high in purchasing power terms. Premier Li publicly commends the Strategic Reserve Council.'
+    }
+  };
+
+  const country = bulletins[countryKey];
+  if (!country) return null;
+
+  if (metric === 'settlement' && value < 35) return country.settlement_low;
+  if (metric === 'settlement' && value > 70) return country.settlement_high;
+  if (metric === 'safety' && value < 40) return country.safety_low;
+  if (metric === 'safety' && value > 85) return country.safety_high;
+  if (metric === 'liquidity' && value < 35) return country.liquidity_low;
+  if (metric === 'liquidity' && value > 80) return country.liquidity_high;
+  if (metric === 'growth' && value < 35) return country.growth_low;
+  if (metric === 'growth' && value > 75) return country.growth_high;
+  return null;
+}
+
+// =====================================================================
+// POST-ACTION NARRATIVES — what it looks/feels like when you act
+// =====================================================================
+function getActionNarrative(round, countryKey, stratName, alloc, portRet) {
+  // Big portfolio shifts get described narratively
+  const prevAlloc = G.round > 0 ? G.allocations[G.allocations.length - 2] : G.country.startAlloc;
+  const wDelta = alloc.w - prevAlloc.w;
+  const eDelta = alloc.e - prevAlloc.e;
+  const gDelta = alloc.g - prevAlloc.g;
+  const dDelta = alloc.d - prevAlloc.d;
+
+  const narratives = {
+    petrolistan: {
+      bigWestSell: {headline:'Petrolistan Central Bank Sells $'+Math.abs(wDelta)+'B in Western Assets — Largest Divestment in National History', detail:'Currency traders describe "orderly but urgent" selling. The Petrolistan sovereign wealth fund quietly moved billions out of New York through intermediary banks in Abu Dhabi. Western financial press calls it "a vote of no confidence in the dollar system."'},
+      bigEastBuy: {headline:'Petrolistan Signs Yuan Swap Agreement Worth $'+Math.abs(eDelta)+'B with People\'s Bank of China', detail:'The Supreme Economic Council approved the agreement at dawn. Oil deliveries to Shanghai will now settle in yuan within 48 hours. Western diplomats are "deeply concerned."'},
+      bigGoldBuy: {headline:'Gold Shipments Arrive at Petrolistan Central Vault — '+Math.abs(gDelta)+'% of Reserves Now in Physical Metal', detail:'Armored convoys from Swiss refineries delivered 200 tonnes of gold bars to the underground vault beneath the Finance Ministry. Security footage (leaked) shows pallets being lowered by crane.'},
+      bigDigitalBuy: {headline:'Petrolistan Sovereign Fund Makes Historic Digital Asset Acquisition', detail:'The fund purchased a mix of Bitcoin and tokenized treasury instruments through offshore exchanges. Financial analysts are divided: "visionary" or "reckless."'},
+      trapFortress: {headline:'Petrolistan DOUBLES DOWN on Dollar Holdings Despite Sanctions Threat', detail:'In a move that stunned financial analysts, the reserve manager increased Western asset holdings even as sanctions negotiations escalated. Western media: "Either brilliant confidence or catastrophic hubris." The Supreme Leader reportedly nodded approvingly.'},
+      trapCrypto: {headline:'Petrolistan Bets National Reserves on Cryptocurrency in Unprecedented Move', detail:'65% of the nation\'s reserves are now in digital assets. The Financial Times calls it "the most aggressive sovereign crypto bet in history." Medical supply chains now depend on the price of Bitcoin holding above $80,000.'}
+    },
+    sanctiongrad: {
+      bigEastBuy: {headline:'Sanctiongrad and China Sign Expanded Bilateral Currency Agreement', detail:'The deal, signed in the Obsidian Palace, allows direct ruble-yuan conversion for commodity trade. President Volkov called it "the architecture of a new financial order." Chinese state media was more restrained: "a pragmatic arrangement."'},
+      bigGoldBuy: {headline:'Sanctiongrad Central Bank Adds Gold as Sanctions Workaround', detail:'With Western reserves frozen and alternatives limited, the central bank increased gold reserves through purchases from Central Asian mining operations. Settlement is slow but sanctions-proof.'},
+      bigDigitalBuy: {headline:'Sanctiongrad Quietly Builds Cryptocurrency Reserve Through Mining Operations', detail:'State-backed mining facilities in Siberia are generating Bitcoin at scale. The energy cost is enormous, but the assets are beyond anyone\'s reach. President Volkov: "They cannot freeze what they cannot find."'},
+      trapBurn: {headline:'Sanctiongrad Goes All-In on Digital Independence — Economists Sound Alarm', detail:'With 40% of reserves in digital assets, Sanctiongrad has the most aggressive crypto allocation of any sovereign entity. Opposition economists (writing abroad) warn: "You cannot buy bread with Bitcoin."'},
+      trapVictory: {headline:'Victory Lap: Sanctiongrad Celebrates Dollar Decline While Economy Stalls', detail:'State television broadcasts President Volkov\'s triumphant address from Red Square. Meanwhile, grocery store shelves in smaller cities grow emptier. 45% of reserves are in digital assets most trade partners refuse to accept.'}
+    },
+    dragonia: {
+      bigWestSell: {headline:'Dragonia Sells $'+Math.abs(wDelta)+'B in US Treasuries — Bond Markets Shudder', detail:'The sell-off was executed through multiple channels over 72 hours. Treasury yields spiked 15 basis points before stabilizing. The White House issued a statement urging "continued partnership." General Zhao declined to comment.'},
+      bigEastBuy: {headline:'Dragonia Redirects Reserves Toward BRICS Partners and Digital Yuan Infrastructure', detail:'The Strategic Reserve Council approved a major rebalancing. Eastern currency reserves will now support the BRICS Bridge payment system that Dragonia helped design. Premier Li: "We are simply matching our reserves to our trade reality."'},
+      bigGoldBuy: {headline:'Dragonia Gold Reserves Hit Record — Central Bank Buys Through Shanghai Gold Exchange', detail:'Analysts estimate Dragonia added '+Math.abs(gDelta)+' percentage points of gold to reserves this year alone. The gold is stored domestically in vaults the West cannot touch.'},
+      bigDigitalBuy: {headline:'Dragonia Launches Sovereign Digital Asset Portfolio — Largest in History', detail:'The Dragon Council authorized the creation of a digital asset reserve managed by a new government agency. Both Bitcoin and tokenized instruments are included. General Zhao: "If we do not lead this transition, someone else will."'},
+      trapFortress: {headline:'Dragonia INCREASES Treasury Holdings to 65% — "Too Big to Sanction" Strategy', detail:'In a move that baffled analysts, Dragonia bought discounted Treasuries during the sanctions panic. The bet: America would never sanction its largest creditor. Leaked Pentagon memo suggests some in Washington are exploring exactly that option.'},
+      trapDigital: {headline:'Dragonia Bets 60% of World\'s Largest Reserves on Digital Assets', detail:'The most consequential financial decision of the decade. If it works, Dragonia becomes the architect of a post-dollar settlement system. If it fails, factory workers across 15 provinces pay the price.'}
+    }
+  };
+
+  const cn = narratives[countryKey];
+  if (!cn) return null;
+
+  // Trap-specific narratives
+  if (stratName === 'Fortress Dollar' || stratName === 'Treasury Fortress') return cn.trapFortress;
+  if (stratName === 'Full Crypto') return cn.trapCrypto;
+  if (stratName === 'Burn the Ships') return cn.trapBurn;
+  if (stratName === 'Victory Lap') return cn.trapVictory;
+  if (stratName === 'Digital Supremacy') return cn.trapDigital;
+
+  // Dynamic narratives based on biggest shift
+  const shifts = [{cat:'w',delta:wDelta},{cat:'e',delta:eDelta},{cat:'g',delta:gDelta},{cat:'d',delta:dDelta}];
+  shifts.sort((a,b) => Math.abs(b.delta) - Math.abs(a.delta));
+  const biggest = shifts[0];
+
+  if (Math.abs(biggest.delta) < 10) return null; // Small moves don't make news
+
+  if (biggest.cat === 'w' && biggest.delta < -10) return cn.bigWestSell;
+  if (biggest.cat === 'e' && biggest.delta > 10) return cn.bigEastBuy;
+  if (biggest.cat === 'g' && biggest.delta > 10) return cn.bigGoldBuy;
+  if (biggest.cat === 'd' && biggest.delta > 10) return cn.bigDigitalBuy;
+
+  return null;
+}
+
+// =====================================================================
+// EPILOGUE — country future based on final performance
+// =====================================================================
+function getEpilogue(countryKey, finalGrade, strategies) {
+  const epilogues = {
+    petrolistan: {
+      A: 'Petrolistan enters 2030 as the model for successful reserve diversification. The Supreme Economic Council publishes a white paper — now studied in central banking courses worldwide — on how an oil-dependent economy built genuine financial independence without abandoning its core revenue stream. Supreme Leader Khalid claims credit. Hospitals are stocked, infrastructure projects ahead of schedule, and Petrolistan\'s oil is now priced in a basket of currencies. Western analysts grudgingly admit: "They did it right."',
+      B: 'Petrolistan is stable but not triumphant. Import channels function, oil revenues flow, but the transition to a diversified reserve base is incomplete. Some provinces still face occasional medicine delays. The Supreme Leader declares victory anyway, but the reserve manager knows the real work — building settlement infrastructure with non-Western partners — will take another decade.',
+      C: 'Petrolistan survives but bears scars. The reserve portfolio held together under pressure, but inefficiencies cost the nation billions in missed returns and settlement delays. Oil infrastructure upgrades are behind schedule due to parts shortages. The Supreme Economic Council privately discusses replacing the reserve manager. The transition to a post-dollar world is happening, but Petrolistan is following rather than leading.',
+      D: 'Petrolistan is struggling. Import channels are unreliable, medicine shortages are becoming normalized, and oil infrastructure maintenance has been deferred for the third consecutive year. The Supreme Leader blames foreign adversaries, but internal memos point to reserve management failures. Young professionals are emigrating. The reserve portfolio needs years to recover.',
+      F: 'Petrolistan faces a humanitarian crisis. Oil production is declining because maintenance equipment cannot be imported. Hospital pharmacies are rationing basic medications. The Supreme Leader has declared a "state of economic emergency" and is negotiating with anyone who will listen. The reserve manager has been replaced. Twice.'
+    },
+    sanctiongrad: {
+      A: 'Against all odds, Sanctiongrad has built a functioning parallel economy. The frozen Western reserves are written off, but the remaining portfolio generates enough liquidity and settlement capability to sustain essential trade. Consumer goods are available (mostly Chinese-made). President Volkov\'s approval ratings are stable. The economy isn\'t thriving, but it isn\'t collapsing either — and after years of sanctions, that is its own kind of victory.',
+      B: 'Sanctiongrad perseveres. The economy functions through a patchwork of bilateral agreements, gold-for-goods swaps, and BRICS payment rails. It\'s slower, more expensive, and less elegant than the Western system, but it works. Consumer electronics are scarce but available. President Volkov tells state media that "independence has a price worth paying." Whether citizens agree is a question no one is permitted to poll.',
+      C: 'Sanctiongrad is surviving, barely. Essential imports flow but at significant markup. Technology access is limited to what China provides, and China drives a hard bargain. The parallel economy works for basics but cannot support modernization. Volkov\'s rhetoric remains defiant, but the Obsidian Palace corridors are quieter than they used to be.',
+      D: 'Sanctiongrad\'s economy is visibly deteriorating. Consumer goods shortages are spreading. Young engineers emigrate to Central Asia and the Gulf. The frozen reserves feel less like a political grievance and more like a permanent loss. Volkov still appears on state television, but the speeches are shorter now.',
+      F: 'Sanctiongrad\'s economy has entered a crisis the government can no longer conceal. Essential goods are rationed. Industrial output has fallen to levels not seen since the 1990s. The frozen Western reserves, the failed digital bets, and the inadequate settlement infrastructure have created a compounding disaster. Volkov remains in power, but the "liberation" he promised looks increasingly like isolation.'
+    },
+    dragonia: {
+      A: 'Dragonia enters 2030 as the architect of the new financial order it spent a decade building. BRICS Bridge processes trillions in trade. The digital yuan is accepted across Southeast Asia. The Treasury selloff was managed so smoothly that markets barely noticed. General Zhao is promoted. Premier Li addresses the National People\'s Assembly: "The era of dependence on any single currency is over. Dragonia\'s reserves serve Dragonia."',
+      B: 'Dragonia has navigated the transition competently. The BRICS payment system works. Factories run. Exports flow. But the Treasury selloff took longer than planned and cost more than projected. The relationship with Washington is strained, and some ASEAN partners are wary of yuan dependence. General Zhao keeps a lower profile now. The transition isn\'t complete, but the direction is irreversible.',
+      C: 'Dragonia\'s transition is half-finished. Export supply chains function but with growing friction. The Treasury portfolio lost more value than the Dragon Council was told to expect. BRICS Bridge works for some trades but not all. General Zhao faces pointed questions at every council meeting. The strategy was sound in theory but execution was uneven.',
+      D: 'Dragonia\'s reserves are bleeding value. The Treasury selloff was poorly timed, BRICS Bridge adoption is slower than planned, and factories in three provinces face periodic shutdowns from raw material payment delays. Premier Li cancels a planned overseas trip. General Zhao offers his resignation. It is not accepted — but it is not forgotten either.',
+      F: 'Dragonia faces its worst economic crisis in three decades. Manufacturing output has fallen sharply as supply chains break down. The massive digital asset bet (or the failed Treasury strategy) has erased hundreds of billions in reserve value. Unemployment protests — rare and alarming — appear in industrial cities. The Dragon Council meets in emergency session. The era of easy growth is over, and the reserve portfolio that was supposed to insulate the economy has instead become the problem.'
+    }
+  };
+
+  const country = epilogues[countryKey];
+  if (!country) return '';
+  return country[finalGrade] || country['C'];
+}
+
+// =====================================================================
+// RETURNS — trap strategies get punished
+// =====================================================================
+function computeRoundReturns(round) {
+  const means = RETURN_MEANS[round];
+  const ret = {};
+  CATS.forEach(c => {
+    ret[c] = normRand(G.rng, means[c], RETURN_SD[c]);
+  });
+  return ret;
+}
+
+// Extra penalty returns for trap strategies
+function getTrapPenalty(round, strategyName) {
+  // R2 traps: "Fortress Dollar" / "Treasury Fortress" / "Burn the Ships"
+  if (round === 1) {
+    if (strategyName === 'Fortress Dollar' || strategyName === 'Treasury Fortress') {
+      // Sanctions actually hit — Western reserves partially frozen
+      return {w: -15, sanctionsHit: true};
+    }
+    if (strategyName === 'Burn the Ships') {
+      return {d: -20}; // Digital crash after reckless nationalization
+    }
+  }
+  // R4 traps: "Full Crypto" / "Digital Supremacy" / "Victory Lap"
+  if (round === 3) {
+    if (strategyName === 'Full Crypto' || strategyName === 'Digital Supremacy' || strategyName === 'Victory Lap') {
+      return {d: -25}; // Crypto crash after the initial surge
+    }
+  }
+  return null;
+}
+
+// =====================================================================
+// UI HELPERS
+// =====================================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  el.classList.add('fade-in');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showPhase(p) {
+  document.querySelectorAll('#screen-round .phase').forEach(ph => ph.style.display='none');
+  const el = document.getElementById('phase-'+p);
+  el.style.display='block';
+  el.classList.add('fade-in');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderAllocBar(alloc, container, showLegend) {
+  let html = '<div class="alloc-bar">';
+  const frozen = G.country && G.country.frozen;
+  CATS.forEach(c => {
+    const v = alloc[c];
+    if (v > 0) {
+      const isFrozen = frozen && frozen[c] && !G.sanctionsApplied === false; // simplified
+      const cls = (frozen && frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3) ? 'frozen' : c;
+      const label = v >= 8 ? v+'%' : '';
+      html += `<div class="seg ${cls}" style="width:${v}%">${label}</div>`;
+    }
+  });
+  html += '</div>';
+  if (showLegend) {
+    html += '<div class="alloc-legend">';
+    CATS.forEach(c => {
+      const v = alloc[c];
+      if (v > 0) {
+        const isFrozen = (G.country && G.country.frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3);
+        const fr = isFrozen ? ' (FROZEN)' : '';
+        html += `<span><span class="dot" style="background:${isFrozen?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%${fr}</span>`;
+      }
+    });
+    html += '</div>';
+  }
+  if (typeof container === 'string') document.getElementById(container).innerHTML = html;
+  else container.innerHTML = html;
+}
+
+// =====================================================================
+// LANDING
+// =====================================================================
+document.getElementById('btnStart').addEventListener('click', () => {
+  const name = document.getElementById('playerName').value.trim();
+  if (!name) { document.getElementById('playerName').style.borderColor='var(--negative)'; document.getElementById('playerName').focus(); setTimeout(()=>document.getElementById('playerName').style.borderColor='',1500); return; }
+  window._playerName = name;
+  buildCountryCards();
+  showScreen('screen-countries');
+});
+
+// =====================================================================
+// COUNTRY SELECT
+// =====================================================================
+function buildCountryCards() {
+  const grid = document.getElementById('countryGrid');
+  grid.innerHTML = '';
+  Object.keys(COUNTRIES).forEach(key => {
+    const c = COUNTRIES[key];
+    const card = document.createElement('div');
+    card.className = 'country-card';
+    card.tabIndex = 0;
+
+    let barHtml = '<div class="start-bar"><div class="alloc-bar">';
+    CATS.forEach(cat => {
+      const v = c.startAlloc[cat];
+      if (v > 0) {
+        const cls = (c.frozen[cat]) ? 'frozen' : cat;
+        barHtml += `<div class="seg ${cls}" style="width:${v}%">${v>=8?v+'%':''}</div>`;
+      }
+    });
+    barHtml += '</div><div class="alloc-legend">';
+    CATS.forEach(cat => {
+      const v = c.startAlloc[cat];
+      if (v > 0) {
+        const fr = c.frozen[cat] ? ' \u2744\uFE0F' : '';
+        barHtml += `<span><span class="dot" style="background:${c.frozen[cat]?'#999':CAT_COLORS[cat]}"></span>${CAT_SHORT[cat]} ${v}%${fr}</span>`;
+      }
+    });
+    barHtml += '</div></div>';
+
+    card.innerHTML = `<span class="flag">${c.flag}</span><h3>${c.name}</h3><p class="flavor">${c.flavor}</p><div class="tension">${c.tension}</div>${barHtml}`;
+
+    const handler = () => { initGame(key, window._playerName); startRound(); };
+    card.addEventListener('click', handler);
+    card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();handler();}});
+    grid.appendChild(card);
+  });
+}
+
+// =====================================================================
+// ROUND FLOW
+// =====================================================================
+function startRound() {
+  showScreen('screen-round');
+  const dots = document.getElementById('roundDots');
+  dots.innerHTML = '';
+  for (let i=0;i<4;i++){const d=document.createElement('div');d.className='round-dot';if(i<G.round)d.classList.add('done');if(i===G.round)d.classList.add('now');dots.appendChild(d);}
+
+  document.getElementById('phaseNewsLabel').textContent = `Round ${G.round+1} of 4`;
+  document.getElementById('roundTitle').textContent = `${ROUND_YEARS[G.round]}: ${ROUND_NAMES[G.round]}`;
+
+  // News with leader quotes
+  const n = getNews(G.round, G.countryKey);
+  let newsHtml = `<div class="news-badge">Breaking News &mdash; ${ROUND_YEARS[G.round]}</div>`;
+  newsHtml += `<div class="headline">${n.h1}</div>`;
+  newsHtml += `<div class="headline">${n.h2}</div>`;
+  // Provocation for R2
+  if (G.round === 1 && G.country.r2Provocation) {
+    newsHtml += `<div class="headline" style="color:var(--accent-bright)">${G.country.r2Provocation}</div>`;
+  }
+  newsHtml += `<div class="analyst">${n.analyst}</div>`;
+  if (n.leaderQuote) {
+    newsHtml += `<div class="leader-quote"><div class="speaker">${n.leaderQuote.speaker}</div>"${n.leaderQuote.quote}"</div>`;
+  }
+  document.getElementById('newsPanel').innerHTML = newsHtml;
+
+  // Impact
+  document.getElementById('impactBox').innerHTML = getImpact();
+
+  // Current position
+  const currAlloc = G.round === 0 ? G.country.startAlloc : G.allocations[G.allocations.length-1];
+  const posEl = document.getElementById('currentPosition');
+  posEl.innerHTML = '<div style="margin-top:16px;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;">YOUR CURRENT RESERVES</div>';
+  const barDiv = document.createElement('div');
+  posEl.appendChild(barDiv);
+  renderAllocBar(currAlloc, barDiv, true);
+
+  showPhase('news');
+}
+
+function getImpact() {
+  const r = G.round;
+  const ck = G.countryKey;
+  if (r === 0) {
+    return '<div class="impact-box info"><strong>Situation</strong>No immediate disruption. Markets are calm. This is your chance to set strategic direction before the storms arrive.</div>';
+  }
+  if (r === 1) {
+    if (ck === 'sanctiongrad') {
+      return '<div class="impact-box crisis"><strong>Direct Impact</strong>Your Western reserves remain frozen. The new sanctions on another exporter confirm this is a playbook, not a one-off. Meanwhile, Volkov\'s nationalization of remaining Western corporate assets has made diplomatic relief almost impossible. You\'re navigating with constrained options.</div>';
+    }
+    if (ck === 'petrolistan') {
+      return '<div class="impact-box crisis"><strong>Direct Impact</strong>Western capitals are debating targeted sanctions on Petrolistan in retaliation for the sovereignty tariff. Your ambassador in Washington reports "unprecedented hostility." How you position your reserves right now could determine whether you weather the storm or get caught in it.</div>';
+    }
+    return '<div class="impact-box alert"><strong>Warning</strong>A major commodity exporter just had $300 billion frozen. Meanwhile, General Zhao\'s white paper on financial decoupling has drawn Washington\'s attention. The Dragon Council is debating whether Dragonia could be targeted next.</div>';
+  }
+  if (r === 2) {
+    return '<div class="impact-box info"><strong>Infrastructure Shift</strong>BRICS Bridge is live. Eastern currencies are now significantly more useful for settlement. But China\'s surprise yuan devaluation is a reminder that non-dollar alternatives have their own risks.</div>';
+  }
+  if (r === 3) {
+    if (ck === 'dragonia') {
+      return '<div class="impact-box crisis"><strong>Direct Impact</strong>The dollar crisis hits you hardest. You hold the world\'s largest Treasury stockpile, losing value daily. Every dollar of reserves is worth 8% less than last year. The Dragon Council demands answers.</div>';
+    }
+    if (ck === 'sanctiongrad') {
+      return '<div class="impact-box alert"><strong>Opportunity — or Trap?</strong>The dollar is falling. Western nations, scrambling for energy stability, are offering limited sanctions relief in exchange for energy concessions. President Volkov must choose: take the deal, or stay independent?</div>';
+    }
+    return '<div class="impact-box alert"><strong>Dollar Crisis</strong>US sovereign debt has been downgraded. The dollar is falling sharply. If you\'re still holding heavy dollar positions, those reserves are actively shrinking.</div>';
+  }
+  return '';
+}
+
+// ===== To strategy phase =====
+document.getElementById('btnToStrategy').addEventListener('click', () => {
+  document.getElementById('strategyYear').textContent = ROUND_YEARS[G.round];
+  renderStrategies();
+  showPhase('strategy');
+});
+
+// =====================================================================
+// STRATEGY SELECTION — no predicted scores
+// =====================================================================
+let _selectedStrategy = null;
+
+function renderStrategies() {
+  _selectedStrategy = null;
+  document.getElementById('btnLock').disabled = true;
+  const grid = document.getElementById('strategyGrid');
+  grid.innerHTML = '';
+
+  const options = G.country.strategies[G.round];
+  options.forEach((opt, i) => {
+    const card = document.createElement('div');
+    card.className = 'strategy-card';
+
+    let prosHtml = opt.pros.map(p => `<div class="pro">${p}</div>`).join('');
+    let consHtml = opt.cons.map(c => `<div class="con">${c}</div>`).join('');
+
+    // Mini alloc bar
+    let barHtml = '<div class="alloc-bar" style="height:16px;margin:10px 0 6px">';
+    CATS.forEach(c => {
+      const v = opt.alloc[c];
+      if (v>0) {
+        const cls = (G.country.frozen[c] && G.countryKey === 'sanctiongrad' && G.round < 3) ? 'frozen' : c;
+        barHtml += `<div class="seg ${cls}" style="width:${v}%">${v>=12?v+'%':''}</div>`;
+      }
+    });
+    barHtml += '</div>';
+    let legendHtml = '<div class="alloc-legend" style="margin-bottom:10px">';
+    CATS.forEach(c => {
+      const v = opt.alloc[c];
+      if (v>0) legendHtml += `<span><span class="dot" style="background:${(G.country.frozen[c]&&G.countryKey==='sanctiongrad'&&G.round<3)?'#999':CAT_COLORS[c]}"></span>${CAT_SHORT[c]} ${v}%</span>`;
+    });
+    legendHtml += '</div>';
+
+    card.innerHTML = `<h4>${opt.name}</h4><div class="tagline">"${opt.tag}"</div>${barHtml}${legendHtml}<div class="pros-cons">${prosHtml}${consHtml}</div>`;
+
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.strategy-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      _selectedStrategy = i;
+      document.getElementById('btnLock').disabled = false;
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ===== Lock strategy =====
+document.getElementById('btnLock').addEventListener('click', () => {
+  if (_selectedStrategy === null) return;
+  const opt = G.country.strategies[G.round][_selectedStrategy];
+  const alloc = {...opt.alloc};
+
+  // Handle Sanctiongrad "Accept the Deal" in R4
+  if (opt.unfreezes) {
+    G.country.frozen = {};
+  }
+
+  G.allocations.push(alloc);
+  G.chosenStrategies.push({name: opt.name, tag: opt.tag, isTrap: !!opt.isTrap});
+
+  // Compute returns
+  const returns = computeRoundReturns(G.round);
+
+  // For Sanctiongrad frozen assets: 0% return
+  if (G.country.frozen.w && G.countryKey === 'sanctiongrad' && G.round < 3) returns.w = 0;
+
+  // Trap penalty
+  const trapPen = getTrapPenalty(G.round, opt.name);
+  if (trapPen) {
+    G.hitTrap = true;
+    G.trapRound = G.round;
+    if (trapPen.sanctionsHit) {
+      G.sanctionsApplied = true;
+      returns.w = -20; // Massive loss from partial freeze
+    }
+    CATS.forEach(c => { if (trapPen[c]) returns[c] = trapPen[c]; });
+  }
+
+  let portRet = 0;
+  CATS.forEach(c => portRet += (alloc[c]/100) * returns[c]);
+
+  // Rebalancing cost
+  if (G.round > 0) {
+    const prev = G.allocations[G.allocations.length - 2];
+    let shift = 0;
+    CATS.forEach(c => shift += Math.abs(alloc[c] - prev[c]));
+    if (shift > 20) portRet -= 0.3 * (shift / 20);
+  }
+
+  G.portfolioReturns.push(portRet);
+  G.cumulativeReturn *= (1 + portRet / 100);
+
+  // Score
+  const cumPct = (G.cumulativeReturn - 1) * 100;
+  const growth = growthToScore(cumPct);
+  const liq = computeLiquidity(alloc, G.round);
+  const safety = computeSafety(alloc);
+  const settlement = computeSettlement(alloc, G.countryKey);
+  const score = computeScore(growth, liq, safety, settlement);
+  const grade = getGrade(score);
+
+  G.scores.push(score);
+  G.scoreComponents.push({growth, liq, safety, settlement, cumPct, portRet, returns});
+
+  // Check for catastrophic game over (trap path + F grade)
+  if (opt.isTrap && score < 25) {
+    renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlement, portRet);
+    showPhase('gameover');
+    return;
+  }
+
+  renderResults(alloc, score, grade, growth, liq, safety, settlement, portRet);
+  showPhase('results');
+});
+
+// =====================================================================
+// GAME OVER — catastrophic trap endings
+// =====================================================================
+function renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlement, portRet) {
+  const trapNarratives = {
+    'Fortress Dollar': 'Western nations impose targeted sanctions on Petrolistan in retaliation for the sovereignty tariff. 70% of your reserves are frozen overnight. Hospitals cannot import medicine. Oil infrastructure maintenance grinds to a halt without Western parts. The Supreme Economic Council convenes an emergency session. The Supreme Leader blames "foreign sabotage" but the reserve manager — you — is quietly replaced.',
+    'Treasury Fortress': 'Washington announces secondary sanctions on any entity trading with Dragonia through dollar-denominated systems. Your massive Treasury position becomes a liability rather than an asset. Export orders cancel as trading partners fear sanctions contagion. The Dragon Council strips General Zhao of his position. You are reassigned to a provincial bank.',
+    'Burn the Ships': 'The nationalization of Western assets triggers a cascade of counter-sanctions. Your remaining trade partners demand settlement in gold or yuan, but 40% of your reserves are in digital assets that nobody accepts for real trade. Consumer goods vanish from shelves within weeks. President Volkov declares a "temporary austerity program." It will not be temporary.',
+    'Full Crypto': 'Bitcoin crashes 45% in a single week as regulatory crackdowns sweep across Asia. Your 65% digital position loses nearly a third of its value overnight. Petrolistan cannot pay for food imports. The Supreme Leader declares a state of economic emergency.',
+    'Digital Supremacy': 'A major tokenized asset platform suffers a security breach, triggering a panic selloff across all digital assets. Bitcoin drops 50%. Your 60% digital position is devastated. Dragonia\'s factories idle as you scramble to find liquid reserves to pay for raw materials. Unemployment spikes. The Dragon Council orders an investigation.',
+    'Victory Lap': 'While President Volkov celebrates the dollar\'s decline on state television, the ruble collapses against the yuan. Your 45% digital position crashes as crypto markets correct. Bread lines stretch around city blocks. The "victory" over the dollar has become a defeat for ordinary citizens.'
+  };
+
+  const narrative = trapNarratives[opt.name] || G.country.outcomes.bad;
+  const el = document.getElementById('phase-gameover');
+  el.innerHTML = `
+    <div class="game-over">
+      <h3>Catastrophic Outcome</h3>
+      <p>${narrative}</p>
+      <div class="score-panel">
+        <div class="score-label">Final Stability Score</div>
+        <div class="score-big f">F</div>
+        <div class="score-number">${score} / 100</div>
+        <div class="score-breakdown">
+          <div class="sb-item"><div class="sb-val">${growth}</div><div class="sb-label">Growth</div></div>
+          <div class="sb-item"><div class="sb-val">${liq}</div><div class="sb-label">Liquidity</div></div>
+          <div class="sb-item"><div class="sb-val">${safety}</div><div class="sb-label">Safety</div></div>
+          <div class="sb-item"><div class="sb-val">${settlement}</div><div class="sb-label">Settlement</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="reflection-input">
+      <div class="r-label">Final Reflection</div>
+      <p class="r-question">What went wrong? Looking back at your strategy, where was the critical error — and what would you do differently?</p>
+      <textarea id="reflectionGameOver" placeholder="Write your reflection here..."></textarea>
+    </div>
+    <div style="text-align:center;margin-top:20px;display:flex;gap:12px;justify-content:center">
+      <button class="btn btn-primary" id="btnGameOverReport">View Report &rarr;</button>
+      <button class="btn btn-secondary" id="btnGameOverRestart">Try Again</button>
+    </div>
+  `;
+
+  document.getElementById('btnGameOverReport').addEventListener('click', () => {
+    const ref = document.getElementById('reflectionGameOver').value.trim();
+    if (ref) _reflections.push({round: G.round+1, year: ROUND_YEARS[G.round], question: 'What went wrong?', answer: ref});
+    // Fill remaining rounds with the game-over data
+    while (G.scores.length < 4) {
+      G.allocations.push(alloc);
+      G.chosenStrategies.push({name:'(Game Over)', tag:'Catastrophic outcome ended the game early.', isTrap:false});
+      G.portfolioReturns.push(0);
+      G.scores.push(score);
+      G.scoreComponents.push(G.scoreComponents[G.scoreComponents.length-1]);
+    }
+    renderReport();
+    showScreen('screen-report');
+  });
+
+  document.getElementById('btnGameOverRestart').addEventListener('click', () => {
+    G = {};
+    _reflections = [];
+    document.getElementById('playerName').value = '';
+    showScreen('screen-landing');
+  });
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+function renderResults(alloc, score, grade, growth, liq, safety, settlement, portRet) {
+  document.getElementById('resultsTitle').textContent = `${ROUND_YEARS[G.round]} Results: ${G.chosenStrategies[G.round].name}`;
+
+  // Score
+  const bigEl = document.getElementById('scoreBig');
+  bigEl.textContent = grade;
+  bigEl.className = 'score-big ' + getGradeClass(grade);
+  document.getElementById('scoreNumber').textContent = score + ' / 100';
+
+  document.getElementById('scoreBreakdown').innerHTML = `
+    <div class="sb-item"><div class="sb-val">${growth}</div><div class="sb-label">Growth</div></div>
+    <div class="sb-item"><div class="sb-val">${liq}</div><div class="sb-label">Liquidity</div></div>
+    <div class="sb-item"><div class="sb-val">${safety}</div><div class="sb-label">Safety</div></div>
+    <div class="sb-item"><div class="sb-val">${settlement}</div><div class="sb-label">Settlement</div></div>
+  `;
+
+  renderAllocBar(alloc, 'allocBarResult', true);
+
+  // Outcome narrative
+  const narEl = document.getElementById('outcomeNarrative');
+  const outcomes = G.country.outcomes;
+  let trapMsg = '';
+  if (G.chosenStrategies[G.round].isTrap && G.round === 1 && G.sanctionsApplied) {
+    trapMsg = '<div style="margin-top:12px;font-weight:600;color:var(--negative)">SANCTIONS IMPOSED: Western nations have partially frozen your reserves in retaliation. Your Western assets lost significant value.</div>';
+  }
+
+  if (score >= 65) {
+    narEl.className = 'outcome-box good';
+    narEl.innerHTML = `<div class="ob-label">Status Report</div>${outcomes.good}${trapMsg}`;
+  } else if (score >= 45) {
+    narEl.className = 'outcome-box ok';
+    narEl.innerHTML = `<div class="ob-label">Status Report</div>${outcomes.ok}${trapMsg}`;
+  } else {
+    narEl.className = 'outcome-box bad';
+    narEl.innerHTML = `<div class="ob-label">Status Report</div>${outcomes.bad}${trapMsg}`;
+  }
+
+  const retSign = portRet >= 0 ? '+' : '';
+  const retColor = portRet >= 0 ? 'var(--accent)' : 'var(--negative)';
+  narEl.innerHTML += `<div style="margin-top:12px;font-size:13px;color:var(--muted)">Portfolio return this year: <strong style="color:${retColor}">${retSign}${portRet.toFixed(1)}%</strong> | Cumulative: <strong>${((G.cumulativeReturn-1)*100).toFixed(1)}%</strong></div>`;
+
+  // Metric-specific news bulletins (max 1 to avoid clutter)
+  const metrics = [{name:'settlement',val:settlement},{name:'safety',val:safety},{name:'liquidity',val:liq},{name:'growth',val:growth}];
+  let bulletinHtml = '';
+  for (const m of metrics) {
+    const b = getMetricBulletin(m.name, m.val, G.countryKey);
+    if (b) {
+      const isGood = (m.name==='settlement'&&m.val>70)||(m.name==='safety'&&m.val>85)||(m.name==='liquidity'&&m.val>80)||(m.name==='growth'&&m.val>75);
+      const cls = isGood ? 'good' : 'bad';
+      bulletinHtml = `<div class="outcome-box ${cls}" style="margin-top:10px"><div class="ob-label">${m.name.charAt(0).toUpperCase()+m.name.slice(1)} ${isGood?'Strong':'Alert'}</div>${b}</div>`;
+      break; // Only show the most important one
+    }
+  }
+  document.getElementById('bulletinArea').innerHTML = bulletinHtml;
+
+  // Post-action narrative
+  const actionBlurb = getActionNarrative(G.round, G.countryKey, G.chosenStrategies[G.round].name, alloc, portRet);
+  document.getElementById('actionNarrative').innerHTML = actionBlurb ? `<div class="news-panel" style="margin:16px 0"><div class="news-badge">Action Report &mdash; ${ROUND_YEARS[G.round]}</div><div class="headline" style="font-size:16px">${actionBlurb.headline}</div><div class="analyst">${actionBlurb.detail}</div></div>` : '';
+
+  // Reflection textarea
+  const refQ = getReflection(G.round, G.countryKey);
+  const refEl = document.getElementById('reflectionArea');
+  refEl.innerHTML = `
+    <div class="reflection-input">
+      <div class="r-label">Reflection — Round ${G.round+1}</div>
+      <p class="r-question">${refQ}</p>
+      <textarea id="reflectionInput${G.round}" placeholder="Write your analysis here (2-3 sentences)..."></textarea>
+      <div class="r-hint">Your reflections will be compiled at the end for your discussion post.</div>
+    </div>
+  `;
+
+  // Next button
+  const btnNext = document.getElementById('btnNext');
+  btnNext.textContent = G.round >= 3 ? 'View Final Report \u2192' : 'Continue to ' + ROUND_YEARS[G.round + 1] + ' \u2192';
+}
+
+document.getElementById('btnNext').addEventListener('click', () => {
+  // Require reflection before proceeding
+  const input = document.getElementById('reflectionInput' + G.round);
+  if (input) {
+    const val = input.value.trim();
+    if (!val || val.length < 20) {
+      input.style.borderColor = 'var(--negative)';
+      input.placeholder = 'Please write a brief reflection before continuing (at least a sentence or two)...';
+      input.focus();
+      setTimeout(() => { input.style.borderColor = ''; }, 2000);
+      return;
+    }
+    if (val) {
+      _reflections.push({
+        round: G.round + 1,
+        year: ROUND_YEARS[G.round],
+        question: getReflection(G.round, G.countryKey),
+        answer: val
+      });
+    }
+  }
+
+  G.round++;
+  if (G.round >= 4) { renderReport(); showScreen('screen-report'); }
+  else startRound();
+});
+
+// =====================================================================
+// FINAL REPORT
+// =====================================================================
+function renderReport() {
+  const finalScore = G.scores[G.scores.length-1];
+  const finalGrade = getGrade(finalScore);
+  const fc = G.scoreComponents[G.scoreComponents.length-1];
+
+  document.getElementById('finalScorePanel').innerHTML = `
+    <div class="score-label">Final Stability Score</div>
+    <div class="score-big ${getGradeClass(finalGrade)}">${finalGrade}</div>
+    <div class="score-number">${finalScore} / 100</div>
+    <div class="score-breakdown">
+      <div class="sb-item"><div class="sb-val">${fc.growth}</div><div class="sb-label">Growth</div></div>
+      <div class="sb-item"><div class="sb-val">${fc.liq}</div><div class="sb-label">Liquidity</div></div>
+      <div class="sb-item"><div class="sb-val">${fc.safety}</div><div class="sb-label">Safety</div></div>
+      <div class="sb-item"><div class="sb-val">${fc.settlement}</div><div class="sb-label">Settlement</div></div>
+    </div>
+  `;
+
+  document.getElementById('reportSummary').innerHTML = `
+    <div class="rg-label">Player</div><div class="rg-value">${G.playerName}</div>
+    <div class="rg-label">Country</div><div class="rg-value">${G.country.name}</div>
+    <div class="rg-label">Final Grade</div><div class="rg-value">${finalGrade} (${finalScore}/100)</div>
+    <div class="rg-label">Cumulative Return</div><div class="rg-value">${((G.cumulativeReturn-1)*100).toFixed(1)}%</div>
+    <div class="rg-label">Trap Strategy?</div><div class="rg-value">${G.hitTrap ? 'Yes (Round '+(G.trapRound+1)+')' : 'No'}</div>
+  `;
+
+  // Rounds
+  const roundsEl = document.getElementById('reportRounds');
+  roundsEl.innerHTML = '';
+  for (let r = 0; r < G.scores.length; r++) {
+    const alloc = G.allocations[r];
+    const strat = G.chosenStrategies[r];
+    const sc = G.scoreComponents[r];
+    const grade = getGrade(G.scores[r]);
+    let allocStr = CATS.map(c => `${CAT_SHORT[c]} ${alloc[c]}%`).join(' | ');
+
+    let html = `<div style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);">`;
+    html += `<div style="display:flex;justify-content:space-between;align-items:baseline"><h4 style="font-family:Fraunces,serif;font-size:15px;">${ROUND_YEARS[r]}: ${ROUND_NAMES[r]}</h4><span style="font-family:Fraunces,serif;font-size:18px;font-weight:700;color:${G.scores[r]>=65?'var(--accent)':G.scores[r]>=45?'var(--warning)':'var(--negative)'}">${grade}</span></div>`;
+    html += `<div style="font-size:13px;margin:6px 0"><strong>Strategy:</strong> ${strat.name}${strat.isTrap?' \u26A0\uFE0F':''} &mdash; <em>"${strat.tag}"</em></div>`;
+    html += `<div style="font-size:13px;color:var(--muted)">${allocStr}</div>`;
+    html += `<div style="font-size:13px;margin-top:4px">Return: <strong>${sc.portRet>=0?'+':''}${sc.portRet.toFixed(1)}%</strong> | Growth ${sc.growth} | Liquidity ${sc.liq} | Safety ${sc.safety} | Settlement ${sc.settlement}</div>`;
+    html += '</div>';
+    roundsEl.innerHTML += html;
+  }
+
+  // Epilogue — country future
+  const epilogue = getEpilogue(G.countryKey, finalGrade, G.chosenStrategies);
+  if (epilogue) {
+    const epCls = finalScore >= 67 ? 'good' : finalScore >= 50 ? 'ok' : 'bad';
+    document.getElementById('reportEpilogue').innerHTML = `<div class="outcome-box ${epCls}" style="margin:16px 0"><div class="ob-label">${G.country.name} — 2030 and Beyond</div>${epilogue}</div>`;
+  }
+
+  // Reflections log
+  const refEl = document.getElementById('reportReflections');
+  if (_reflections.length > 0) {
+    let refHtml = '<div class="reflection-log"><h4>Your Reflections</h4>';
+    _reflections.forEach(r => {
+      refHtml += `<div class="log-entry"><div class="log-q">Round ${r.round} (${r.year})</div><div style="font-size:13px;color:var(--muted);margin-bottom:6px;line-height:1.5">${r.question}</div><div class="log-a">${r.answer}</div></div>`;
+    });
+    refHtml += '</div>';
+    refEl.innerHTML = refHtml;
+  } else {
+    refEl.innerHTML = '<div class="reflection-log"><h4>Your Reflections</h4><p style="color:var(--muted);font-size:14px;">No reflections recorded. Consider playing again and writing reflections each round — they\'ll form the basis of your discussion post.</p></div>';
+  }
+
+  // Result code
+  const data = {
+    v:4,
+    player:G.playerName, country:G.countryKey, seed:G.seed,
+    strategies: G.chosenStrategies, allocations: G.allocations,
+    returns: G.scoreComponents.map(s=>s.returns),
+    portfolioReturns: G.portfolioReturns,
+    cumulativeReturn: ((G.cumulativeReturn-1)*100).toFixed(2),
+    scores: G.scores, finalGrade,
+    hitTrap: G.hitTrap,
+    reflections: _reflections
+  };
+  document.getElementById('resultCode').textContent = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+}
+
+// =====================================================================
+// COPY BUTTONS
+// =====================================================================
+document.getElementById('btnCopyReport').addEventListener('click', () => {
+  let text = 'RESERVE CURRENCY WARGAME — SESSION REPORT\n\n';
+  text += document.getElementById('reportSummary').innerText + '\n\n';
+  text += 'ROUND-BY-ROUND:\n' + document.getElementById('reportRounds').innerText + '\n\n';
+  if (_reflections.length > 0) {
+    text += 'REFLECTIONS:\n';
+    _reflections.forEach(r => { text += `\nRound ${r.round} (${r.year}):\nQ: ${r.question}\nA: ${r.answer}\n`; });
+  }
+  text += '\nRESULT CODE:\n' + document.getElementById('resultCode').textContent;
+  navigator.clipboard.writeText(text);
+  showCopy(document.getElementById('btnCopyReport'));
+});
+
+document.getElementById('btnCopyReflections').addEventListener('click', () => {
+  let text = `RESERVE CURRENCY WARGAME — REFLECTION LOG\nPlayer: ${G.playerName} | Country: ${G.country.name} | Final Grade: ${getGrade(G.scores[G.scores.length-1])}\n\n`;
+  _reflections.forEach(r => { text += `Round ${r.round} (${r.year}):\nQ: ${r.question}\nA: ${r.answer}\n\n`; });
+  if (text) navigator.clipboard.writeText(text);
+  showCopy(document.getElementById('btnCopyReflections'));
+});
+
+document.getElementById('btnCopyCode').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('resultCode').textContent);
+  showCopy(document.getElementById('btnCopyCode'));
+});
+
+function showCopy(btn){const o=btn.textContent;btn.textContent='Copied!';setTimeout(()=>btn.textContent=o,1500);}
+
+document.getElementById('btnPlayAgain').addEventListener('click', () => {
+  G = {};
+  _reflections = [];
+  document.getElementById('playerName').value = '';
+  showScreen('screen-landing');
+});
+</script>
+</body>
+</html>
