@@ -213,8 +213,6 @@ h2.section-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;mar
     </div>
   </div>
   <div class="name-section">
-    <label for="playerName">Enter your name or student ID</label>
-    <input type="text" id="playerName" placeholder="e.g. Jane Smith" autocomplete="off">
     <div style="margin-top:14px"><button class="btn btn-primary" id="btnStart">Choose Your Country &rarr;</button></div>
   </div>
 </div>
@@ -580,11 +578,12 @@ const COUNTRIES = {
 let G = {};
 let _reflections = [];
 
-function initGame(countryKey, playerName) {
+function initGame(countryKey) {
   const c = COUNTRIES[countryKey];
-  const seed = hashStr(playerName + countryKey);
+  // A random seed per game. The page never asks for a name or any other identifier (Rize rule, 2026-11-16).
+  const seed = (crypto.getRandomValues(new Uint32Array(1))[0] >>> 0) || 1;
   G = {
-    playerName, countryKey, country: c,
+    countryKey, country: c,
     round: 0,
     rng: mulberry32(seed),
     seed,
@@ -918,9 +917,6 @@ function renderAllocBar(alloc, container, showLegend) {
 // LANDING
 // =====================================================================
 document.getElementById('btnStart').addEventListener('click', () => {
-  const name = document.getElementById('playerName').value.trim();
-  if (!name) { document.getElementById('playerName').style.borderColor='var(--negative)'; document.getElementById('playerName').focus(); setTimeout(()=>document.getElementById('playerName').style.borderColor='',1500); return; }
-  window._playerName = name;
   buildCountryCards();
   showScreen('screen-countries');
 });
@@ -959,7 +955,7 @@ function buildCountryCards() {
 
     card.innerHTML = `<span class="flag">${c.flag}</span><h3>${c.name}</h3><p class="flavor">${c.flavor}</p><div class="tension">${c.tension}</div>${barHtml}`;
 
-    const handler = () => { initGame(key, window._playerName); startRound(); };
+    const handler = () => { initGame(key); startRound(); };
     card.addEventListener('click', handler);
     card.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){e.preventDefault();handler();}});
     grid.appendChild(card);
@@ -1231,7 +1227,6 @@ function renderGameOver(opt, alloc, score, grade, growth, liq, safety, settlemen
   document.getElementById('btnGameOverRestart').addEventListener('click', () => {
     G = {};
     _reflections = [];
-    document.getElementById('playerName').value = '';
     showScreen('screen-landing');
   });
 }
@@ -1364,7 +1359,6 @@ function renderReport() {
   `;
 
   document.getElementById('reportSummary').innerHTML = `
-    <div class="rg-label">Player</div><div class="rg-value">${G.playerName}</div>
     <div class="rg-label">Country</div><div class="rg-value">${G.country.name}</div>
     <div class="rg-label">Final Grade</div><div class="rg-value">${finalGrade} (${finalScore}/100)</div>
     <div class="rg-label">Cumulative Return</div><div class="rg-value">${((G.cumulativeReturn-1)*100).toFixed(1)}%</div>
@@ -1413,7 +1407,7 @@ function renderReport() {
   // Result code
   const data = {
     v:4,
-    player:G.playerName, country:G.countryKey, seed:G.seed,
+    country:G.countryKey, seed:G.seed,
     strategies: G.chosenStrategies, allocations: G.allocations,
     returns: G.scoreComponents.map(s=>s.returns),
     portfolioReturns: G.portfolioReturns,
@@ -1442,7 +1436,7 @@ document.getElementById('btnCopyReport').addEventListener('click', () => {
 });
 
 document.getElementById('btnCopyReflections').addEventListener('click', () => {
-  let text = `RESERVE CURRENCY WARGAME: REFLECTION LOG\nPlayer: ${G.playerName} | Country: ${G.country.name} | Final Grade: ${getGrade(G.scores[G.scores.length-1])}\n\n`;
+  let text = `RESERVE CURRENCY WARGAME: REFLECTION LOG\nCountry: ${G.country.name} | Final Grade: ${getGrade(G.scores[G.scores.length-1])}\n\n`;
   _reflections.forEach(r => { text += `Round ${r.round} (${r.year}):\nQ: ${r.question}\nA: ${r.answer}\n\n`; });
   if (text) navigator.clipboard.writeText(text);
   showCopy(document.getElementById('btnCopyReflections'));
